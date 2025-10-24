@@ -1,0 +1,152 @@
+\documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
+\usepackage{luwa-ul}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{fp}
+\usepackage{lltjext}
+\usepackage{luatexja-ruby}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    breakatwhitespace=false,  
+    columns=flexible           
+}
+
+\usepackage{hyperref} 
+\hypersetup{
+  luatex, pdfencoding=auto, 
+  colorlinks=true,
+  linkcolor=black,     
+  citecolor=black,     
+  urlcolor=DeepSkyBlue3,      
+  pdfborder={0 0 0}, 
+}
+
+\colorlet{grayLight}{white!80!black} 
+
+\NewTCBListing{SourceCode}{ O{Input} m !o !O{DeepSkyBlue3} }{%
+  enhanced, colback=black!70, colframe=Snow4,
+  toptitle=-1mm, bottomtitle=-1mm,
+  righttitle=-1mm, lefttitle=-1mm,
+  arc=.5mm, 
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!80, coltext=white]{\raisebox{-.1ex}{\vphantom{羅}#1}}},fonttitle=\gtfamily\footnotesize\bfseries,boxrule=0.8pt,
+  breakable,before upper={\color{white}},top=-0.5mm,bottom=-0.5mm,
+  after title=\IfNoValueTF{#3}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=grayLight, coltext=#4]{\raisebox{-0.1ex}{\vphantom{羅}#3}}}},
+  listing only,
+  listing options={
+    language={#2},
+    basicstyle=\ttfamily,
+    keywordstyle=\ttfamily\color{white},
+    stringstyle=\itshape\color{white},
+    commentstyle=\small\gtfamily\color{DeepSkyBlue2},
+    showspaces=false,showtabs=false,
+    breaklines=true,breakindent=0pt,
+    showstringspaces=false,
+    columns=fullflexible,
+    tabsize=2,
+    numbers=left,numbersep=1.5pt,
+    numberstyle=\scriptsize\gtfamily\color{gray},
+  }
+}
+
+\NewTColorBox{OutPut}{ O{Output} !o !O{DeepSkyBlue3} }{%
+  enhanced, colframe=Snow4,
+  toptitle=-1mm, bottomtitle=-1mm,
+  righttitle=-1mm, lefttitle=-1mm,
+  arc=.5mm, colback=white, 
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!40, coltext=DeepSkyBlue3]{\raisebox{-.1ex}{\vphantom{羅}#1}}},fonttitle=\gtfamily\footnotesize\bfseries,boxrule=0.8pt,
+  breakable,top=-0.5mm,bottom=-0.5mm,
+  after title=\IfNoValueTF{#2}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=grayLight, coltext=#3]{\raisebox{-0.1ex}{\vphantom{羅}#2}}}}, bottom=2mm, top=2mm, 
+}
+
+\title{\texttt{luwa-ul} Package Documentation}
+\author{Kosei Kawaguchi a.k.a. KKTeX}
+\date{Version 1.0.0 (2025/10/23)}
+
+\begin{document}
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
+\newpage
+\tableofcontents
+\newpage
+
+\section{設置（Installation）}
+インストール方法は、適切な箇所に\texttt{luwa-ul.sty}を配置し、\verb|\usepackage{luwa-ul}|と書き込むだけで完了です。オプションはありません。
+（Place \texttt{luwa-ul.sty} in a directory where LaTeX can find it.）
+
+依存性についてです。（Dependencies: ）
+
+\begin{itemize}
+  \item luacolor, xcolor
+  \item lua-ul
+  \item calc, tikz
+\end{itemize}
+
+\noindent を内部的に仕様しています。（This package uses them internally.）
+
+\section{注意（Caution）}
+このパッケージはその実装の上でLua言語を仕様しているので、LuaLaTeXの上でのみ仕様できるパッケージとなっています。（This package internally uses Lua, so it can be compiled only by LuaLaTeX.）
+
+\section{提供されるコマンド}
+提供されるコマンドは以下の通りです。要望に応じて追加されることもありえます。
+（The provided commands are as follows. I would add some more commands upon requests.）
+
+\begin{itemize}
+  \item \verb|\underLineKK|, \verb|\overLineKK|
+  \item \verb|\nijyusen|, \verb|\keshinijyusen|
+  \item \verb|\thinHighLight|, \verb|\thickHighLight|
+  \item \verb|\stength|, \verb|\sdashgth|, \verb|\snamift|
+\end{itemize}
+
+\subsection{\textbackslash underLineKK}
+このコマンドは、\texttt{lua-ul}パッケージによって提供される\verb|\underLine|コマンドに対し、
+
+\begin{itemize}
+  \item 縦書き時のずれの解消
+  \item ルビがあった際の挙動の変化
+\end{itemize}
+
+\noindent の２点において調整を施したものとなっています。
+
+（This command is basically made out of \verb|\underLine| command, which is provided by \texttt{lua-ul} package. I added some adjustments on it in order to 
+\begin{itemize}
+  \item eliminate the misalignment in vertical writing mode.
+  \item change its behavior when the argument includes phonetic guides.
+\end{itemize}
+）
+
+使い方は以下のようになります。
+
+\begin{SourceCode}{TeX}
+  \underLineKK[color=色, bottom=下線最下部の位置のずれ, heigth=下線の太さ（bottomの位置からの距離で計算）]{引数}
+
+  \underLineKK[color=red]{あああああああああ}
+  \underLineKK[bottom=.1em]{あああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \underLineKK{ああ\ruby{あ}{あ}あああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}
+  横書き：
+
+  \underLineKK[color=red]{ああああ\footnote{あ}{ああああ}あああああ}
+  \underLineKK[bottom=-.5em]{あああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \underLineKK{ああ\ruby{あ}{あ}あああああ}
+     \underLineKK{ああああああ}
+  }
+\end{OutPut}
+
+\end{document}

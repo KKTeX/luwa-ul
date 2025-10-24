@@ -1,0 +1,428 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{luwa-ul}[2025/10/23, Version 1.0.0]
+
+
+\RequirePackage{luacolor, lua-ul, calc, tikz}
+\RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
+\definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
+
+\@ifundefined{gth}{
+  \newcommand{\gth}[1]{\textgt{#1}}
+}{}
+
+\@ifundefined{ft}{
+  \newcommand{\ft}[1]{\textgt{#1}}
+}{}
+
+\newlength{\underLine@KK@Adjust@tmp}
+\newlength{\KKUL@bottom}
+\newlength{\KKUL@height}
+
+\NewDocumentCommand{\underLine@KK@Adjust@bottom}{m}{%
+  \setlength{\underLine@KK@Adjust@tmp}{\f@size pt}%
+  \ifnum\ltjgetparameter{direction}=3%
+    \def\underLine@KK@Adjust@use@bottom{\dimexpr -#1+\underLine@KK@Adjust@tmp/2\relax}%
+  \else%
+    \def\underLine@KK@Adjust@use@bottom{\dimexpr #1-\underLine@KK@Adjust@tmp/7\relax}%
+  \fi
+}
+
+\NewDocumentCommand{\underLine@KK@Adjust@height}{m}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \def\underLine@KK@Adjust@use@height{#1}%
+  \else%
+    \def\underLine@KK@Adjust@use@height{#1}%
+  \fi
+}
+
+\define@key{KKUL}{bottom}{%
+  \underLine@KK@Adjust@bottom{#1}%
+  \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+}
+
+\define@key{KKUL}{height}{%
+  \underLine@KK@Adjust@height{#1}%
+  \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+}
+
+\define@key{KKUL}{color}{%
+  \def\KKUL@color{#1}%
+}
+
+% ルビが中に入っているときだけテキストを上昇させる
+\newlength{\KKUL@rubyraise}
+\directlua{
+  function RubyFlagKKUL(t)
+    if string.find(t, "\\ruby") or string.find(t, "\\kenten") or string.find(t, "\\送り") or string.find(t, "\\振り") then
+      tex.print("1")
+    else
+      tex.print("0")
+    end
+  end
+}
+
+\NewDocumentCommand{\underLineKK}{ O{} +m }{%
+  % 初期化
+  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@height{0.3pt}%
+  \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+  \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  \def\KKUL@color{black}%
+  \def\underLineKK@test@contents{#2}%
+  \setkeys{KKUL}{#1}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\underLineKK@test@contents}}")}\relax}%
+  % 縦書きの場合のみ傍線オフセット設定
+  \ifnum\ltjgetparameter{direction}=3%
+    \ifnum\UL@rubyflag=1%
+      \setlength{\KKUL@rubyraise}{.5em}%
+    \else%
+      \setlength{\KKUL@rubyraise}{0em}%
+    \fi%
+  \else%
+    % 横書き時は補正なし
+    \setlength{\KKUL@rubyraise}{0em}%
+  \fi%
+  % 実際の下線
+  \underLine[bottom=\KKUL@bottom+\KKUL@rubyraise, height=\KKUL@height, color=\KKUL@color]{#2}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%lua-ulで作ったsnamift%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\snamift@bottom}\setlength{\snamift@bottom}{0ex}
+\define@key{snamift}{bottom}{%
+  \setlength{\snamift@bottom}{#1}%
+}
+
+\newcount\snamift@id  % 呼び出しカウンタ
+
+\NewDocumentCommand{\snamift}{ s O{} +m }{%
+  % １：キーを先にセットして \snamift@bottom を更新
+  \setlength{\snamift@bottom}{0ex}%
+  \def\snamift@test@contents{#3}%
+  \setkeys{snamift}{#2}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
+  % 縦書きの場合のみ傍線オフセット設定
+  \ifnum\ltjgetparameter{direction}=3%
+    \ifnum\UL@rubyflag=1%
+      \addtolength{\snamift@bottom}{.5em}%
+    \fi%
+  \fi%
+  % ２：IDを進める
+  \advance\snamift@id by 1\relax%
+  % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
+  \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
+    \cleaders\hbox{%
+      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
+                          x=\f@size/12 pt,y=\f@size/25 pt]
+        \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+        \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+          (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+          sin (5,1) cos (6,0);
+      \end{tikzpicture}%
+    }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
+    \cleaders\hbox{%
+      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
+                          x=\f@size/12 pt,y=\f@size/25 pt]
+        \begin{scope}[yshift=\f@size/1.2 pt]
+          \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+          \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+            (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+            sin (5,1) cos (6,0);
+        \end{scope}
+      \end{tikzpicture}%
+    }%
+  }%
+  % ４：使用（縦横の分岐。直接 csname を呼ぶ）
+  \IfBooleanTF{#1}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#3}%
+    \fi%
+  }}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{\ft{#3}}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{\ft{#3}}%
+    \fi%
+  }}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%lua-ulで作ったstength,stendash%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\stength@radius}
+\newlength{\stength@distance}
+\newlength{\stength@bottom}
+
+\define@key{stength}{radius}{\setlength{\stength@radius}{#1}}
+\define@key{stength}{distance}{\setlength{\stength@distance}{#1}}
+\define@key{stength}{bottom}{\setlength{\stength@bottom}{#1}}
+
+\newcount\stength@id  
+
+\NewDocumentCommand{\stength}{ s O{} +m }{%
+  \setlength{\stength@radius}{.1ex}%
+  \setlength{\stength@distance}{.4ex}%
+  \setlength{\stength@bottom}{0ex}%
+  \def\stength@test@contents{#3}%
+  \setkeys{stength}{#2}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\stength@test@contents}}")}\relax}%
+  \ifnum\ltjgetparameter{direction}=3
+    \ifnum\UL@rubyflag=1
+      \addtolength{\stength@bottom}{.5em}%
+    \fi
+  \fi%
+  \advance\stength@id by 1\relax%
+  \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
+  \xleaders\hbox{%
+  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+    \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+    \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);%.8
+  \end{tikzpicture}%
+  }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
+  \xleaders\hbox{%
+  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+    \begin{scope}[yshift=\f@size/1.2 pt]
+    \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+    \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
+    \end{scope}
+  \end{tikzpicture}%
+  }%
+  }%
+  \IfBooleanTF{#1}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{#3}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{#3}%
+    \fi%
+  }}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{\gth{#3}}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{\gth{#3}}%
+    \fi%
+  }}%
+}
+
+
+\newlength{\underdash@length}
+\newlength{\underdash@distance}
+\newlength{\underdash@width}
+\newlength{\underdash@bottom}
+
+\define@key{underdashgth}{length}{\setlength{\underdash@length}{#1}}
+\define@key{underdashgth}{distance}{\setlength{\underdash@distance}{#1}}
+\define@key{underdashgth}{width}{\setlength{\underdash@width}{#1}}
+\define@key{underdashgth}{bottom}{\setlength{\underdash@bottom}{#1}}
+
+\newcount\underdash@id 
+
+\NewDocumentCommand{\sdashgth}{ s O{} +m }{%
+  \setlength{\underdash@length}{.4ex}%
+  \setlength{\underdash@distance}{.3ex}%
+  \setlength{\underdash@width}{.2pt}%
+  \setlength{\underdash@bottom}{0ex}%
+  \def\sdashgth@test@contents{#3}%
+  \setkeys{underdashgth}{#2}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\sdashgth@test@contents}}")}\relax}%
+  \ifnum\ltjgetparameter{direction}=3
+    \ifnum\UL@rubyflag=1
+      \addtolength{\underdash@bottom}{.5em}%
+    \fi
+  \fi%
+  \advance\underdash@id by 1\relax%
+  \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
+    \xleaders\hbox{%
+      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+        \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+        \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+      \end{tikzpicture}%
+    }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
+    \xleaders\hbox{%
+      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+        \begin{scope}[yshift=\f@size/1.2 pt]%
+          \draw[black,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+          \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+        \end{scope}%
+      \end{tikzpicture}%
+    }%
+  }%
+  %
+  \IfBooleanTF{#1}{{% 
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#3}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{#3}%
+    \fi%
+  }}{{% 
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{\gth{#3}}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{\gth{#3}}%
+    \fi%
+  }}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%overLine%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\define@key{overLine}{color}{%
+  \def\overLineKK@color{#1}%
+}
+
+\newlength{\overLineKK@KK@Adjust}
+
+\NewDocumentCommand{\overLineKK}{ O{} +m }{%
+  \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+  \def\overLineKK@color{black}%
+  \def\overLineKK@test@contents{#2}%
+  \setkeys{overLine}{#1}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\overLineKK@test@contents}}")}\relax}%
+  \ifnum\ltjgetparameter{direction}=3%
+    \ifnum\UL@rubyflag=1%
+      \addtolength{\overLineKK@KK@Adjust}{.6em}%
+    \else%
+      \addtolength{\overLineKK@KK@Adjust}{.1em}%
+    \fi%
+  \else%
+    \ifnum\UL@rubyflag=1%
+      \addtolength{\overLineKK@KK@Adjust}{.6em}%
+    \else%
+      \addtolength{\overLineKK@KK@Adjust}{.1em}%
+    \fi%
+  \fi%
+  \underLineKK[bottom=\overLineKK@KK@Adjust,color=\overLineKK@color]{#2}%
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%グレーの蛍光ペン（細くて下の方だけ塗るやつ）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\thinHighLight@KK@Adjust}
+\newlength{\thinHighLight@KK@Adjust@ruby}
+\newlength{\thinHighLight@KK@Adjust@ruby@yoko}
+\newcommand{\thinHighLight@KK@Adjust@tmp}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \setlength{\thinHighLight@KK@Adjust}{-.3\zw}%
+  \else%
+    \setlength{\thinHighLight@KK@Adjust}{0ex}%
+  \fi
+}
+\DeclareDocumentCommand{\thinHighLight}{ O{color=gray} +m }{%
+  \thinHighLight@KK@Adjust@tmp%
+  \def\thinHighLight@test@contents{#2}%
+  \setlength{\thinHighLight@KK@Adjust@ruby}{0em}%
+  \setlength{\thinHighLight@KK@Adjust@ruby@yoko}{0em}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thinHighLight@test@contents}}")}\relax}%
+  \ifnum\ltjgetparameter{direction}=3
+    \ifnum\UL@rubyflag=1
+      \setlength{\thinHighLight@KK@Adjust@ruby}{-.5em}%
+    \fi
+  \fi
+  \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp-\thinHighLight@KK@Adjust@ruby,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust+\thinHighLight@KK@Adjust@ruby]{#2}%
+}
+
+
+\newlength{\thickHighLight@KK@Adjust}
+\newlength{\thickHighLight@KK@Adjust@ruby}
+\newlength{\thickHighLight@KK@Adjust@ruby@yoko}
+\newcommand{\thickHighLight@KK@Adjust@tmp}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \setlength{\thickHighLight@KK@Adjust}{-1.1\zw}%
+  \else%
+    \setlength{\thickHighLight@KK@Adjust}{0ex}%
+  \fi
+}
+\DeclareDocumentCommand{\thickHighLight}{ O{color=gray} +m }{%
+  \thickHighLight@KK@Adjust@tmp%
+  \def\thickHighLight@test@contents{#2}%
+  \setlength{\thickHighLight@KK@Adjust@ruby}{0em}%
+  \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{0em}%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thickHighLight@test@contents}}")}\relax}%
+  \ifnum\ltjgetparameter{direction}=3
+    \ifnum\UL@rubyflag=1
+      \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+    \fi
+  \else
+    \ifnum\UL@rubyflag=1
+      \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+      \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{.5em}%
+    \fi
+  \fi
+  \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\thickHighLight@KK@Adjust@ruby,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust+\thickHighLight@KK@Adjust@ruby+\thickHighLight@KK@Adjust@ruby@yoko]{#2}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%二重線%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\nijyusen@bottom}
+\newlength{\nijyusen@bottom@adjust}
+
+\define@key{nijyusen}{color}{\def\nijyusen@KK@color{#1}}
+\define@key{nijyusen}{bottom}{\setlength{\nijyusen@bottom}{#1}}
+
+\NewDocumentCommand\nijyusen{ O{} +m }{%
+  \def\nijyusen@KK@color{black}%
+  \setlength{\nijyusen@bottom}{0ex}%
+  \setkeys{nijyusen}{#1}%
+  \ifnum\ltjgetparameter{direction}=3%
+    \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
+  \else%
+    \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
+  \fi%
+  \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]{\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
+}
+
+
+\newlength{\keshinijyuusen@KK@Adjust}
+\newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \setlength{\keshinijyuusen@KK@Adjust}{0ex}%
+  \else%
+    \setlength{\keshinijyuusen@KK@Adjust}{.15ex}%
+  \fi
+}
+\define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
+\NewDocumentCommand\keshinijyusen{ O{} +m }{%
+  \def\keshinijyusen@KK@color{color=black}%
+  \def\keshinijyusen@test@contents{#2}%
+  \setkeys{keshinijyusen}{#1}%
+  \keshinijyuusen@KK@Adjust@tmp%
+  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\keshinijyusen@test@contents}}")}\relax}%
+  % 縦書きの場合のみ傍線オフセット設定
+  \ifnum\ltjgetparameter{direction}=3
+    \ifnum\UL@rubyflag=1
+      \addtolength{\keshinijyuusen@KK@Adjust}{.5em}%
+    \fi
+  \fi
+  \underLineKK[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%下線の前に番号を振る%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\linenumbering}[1]{\raisebox{-1ex}{\scalebox{.6}{#1}}}
+
+\newdimen\overtline@f@size
+\NewDocumentCommand{\tlinenumbering}{s m}{%
+  \setlength{\overtline@f@size}{\f@size pt}%
+  \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
+}}\hskip.15ex}
+
+\NewDocumentCommand{\LineNumbering}{ s m O{0ex} }{% 縦横両対応
+  \ifnum\ltjgetparameter{direction}=3%
+    \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering*{#2}}}{\raisebox{#3}{\tlinenumbering{#2}}}%
+  \else
+    \raisebox{#3}{\linenumbering{#2}}%
+  \fi
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\endinput
