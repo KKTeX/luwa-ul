@@ -109,7 +109,7 @@
     \fi%
   \fi%
   % ２：IDを進める
-  \advance\snamift@id by 1\relax%
+  \global\advance\snamift@id by 1\relax%
   % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
   \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
     \cleaders\hbox{%
@@ -176,7 +176,7 @@
       \addtolength{\stength@bottom}{.5em}%
     \fi
   \fi%
-  \advance\stength@id by 1\relax%
+  \global\advance\stength@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
   \xleaders\hbox{%
   \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
@@ -236,7 +236,7 @@
       \addtolength{\underdash@bottom}{.5em}%
     \fi
   \fi%
-  \advance\underdash@id by 1\relax%
+  \global\advance\underdash@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
     \xleaders\hbox{%
       \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%

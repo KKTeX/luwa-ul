@@ -1,22 +1,31 @@
 \documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
 \usepackage{luwa-ul}
 \usepackage{hyperref}
-\usepackage{listings}
 \usepackage{caption}
 \usepackage[most]{tcolorbox}
 \usepackage{fp}
 \usepackage{lltjext}
 \usepackage{luatexja-ruby}
 
-\lstset{
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue},
-    commentstyle=\color{gray},
-    stringstyle=\color{red},
-    breaklines=true,
-    breakatwhitespace=false,  
-    columns=flexible           
-}
+% You can omit these font settings.
+\RequirePackage[no-math]{fontspec}
+\RequirePackage[no-math,match,scale=1]{luatexja-fontspec}
+\RequirePackage[hiragino-pro,deluxe,expert]{luatexja-preset}
+\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\renewfontfamily{\sffamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\renewfontfamily{\mcfamily}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\renewfontfamily{\gtfamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\providefontfamily{\mgfamily}{HiraMaruPro-W4}
+\newfontfamily{\sfhira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]\newjfontfamily{\sfhiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newfontfamily{\mchira}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\newjfontfamily{\mchiraj}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\gthira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]\newjfontfamily{\gthiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newfontfamily{\mghira}{HiraMaruPro-W4}\newjfontfamily{\mghiraj}{HiraMaruPro-W4}
+\renewcommand{\sffamily}{\sfhira\sfhiraj}
+\renewcommand{\mcfamily}{\mchira\mchiraj}
+\renewcommand{\gtfamily}{\gthira\gthiraj}
+\renewcommand{\mgfamily}{\mghira\mghiraj}
+%%%
+
 
 \usepackage{hyperref} 
 \hypersetup{
@@ -35,9 +44,9 @@
   toptitle=-1mm, bottomtitle=-1mm,
   righttitle=-1mm, lefttitle=-1mm,
   arc=.5mm, 
-  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!80, coltext=white]{\raisebox{-.1ex}{\vphantom{羅}#1}}},fonttitle=\gtfamily\footnotesize\bfseries,boxrule=0.8pt,
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!80, coltext=white]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#1}}},fonttitle=\gtfamily\footnotesize,boxrule=0.8pt,
   breakable,before upper={\color{white}},top=-0.5mm,bottom=-0.5mm,
-  after title=\IfNoValueTF{#3}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=grayLight, coltext=#4]{\raisebox{-0.1ex}{\vphantom{羅}#3}}}},
+  after title=\IfNoValueTF{#3}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=white!80!black, coltext=#4]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#3}}}},
   listing only,
   listing options={
     language={#2},
@@ -55,14 +64,14 @@
   }
 }
 
-\NewTColorBox{OutPut}{ O{Output} !o !O{DeepSkyBlue3} }{%
+\NewTColorBox{OutPut}{ m !o !O{DeepSkyBlue3} }{%
   enhanced, colframe=Snow4,
   toptitle=-1mm, bottomtitle=-1mm,
   righttitle=-1mm, lefttitle=-1mm,
   arc=.5mm, colback=white, 
-  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!40, coltext=DeepSkyBlue3]{\raisebox{-.1ex}{\vphantom{羅}#1}}},fonttitle=\gtfamily\footnotesize\bfseries,boxrule=0.8pt,
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!40, coltext=DeepSkyBlue3]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#1}}},fonttitle=\gtfamily\footnotesize,boxrule=0.8pt,
   breakable,top=-0.5mm,bottom=-0.5mm,
-  after title=\IfNoValueTF{#2}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=grayLight, coltext=#3]{\raisebox{-0.1ex}{\vphantom{羅}#2}}}}, bottom=2mm, top=2mm, 
+  after title=\IfNoValueTF{#2}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=white!80!black, coltext=#3]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#2}}}}, bottom=2mm, top=2mm, 
 }
 
 \title{\texttt{luwa-ul} Package Documentation}
@@ -94,7 +103,7 @@
 \section{注意（Caution）}
 このパッケージはその実装の上でLua言語を仕様しているので、LuaLaTeXの上でのみ仕様できるパッケージとなっています。（This package internally uses Lua, so it can be compiled only by LuaLaTeX.）
 
-\section{提供されるコマンド}
+\section{提供されるコマンド（Commands）}
 提供されるコマンドは以下の通りです。要望に応じて追加されることもありえます。
 （The provided commands are as follows. I would add some more commands upon requests.）
 
@@ -122,7 +131,7 @@
 \end{itemize}
 ）
 
-使い方は以下のようになります。
+使い方は以下のようになります。（You can use it as follows: ）
 
 \begin{SourceCode}{TeX}
   \underLineKK[color=色, bottom=下線最下部の位置のずれ, heigth=下線の太さ（bottomの位置からの距離で計算）]{引数}
@@ -135,7 +144,7 @@
   }
 \end{SourceCode}
 
-\begin{OutPut}
+\begin{OutPut}{Output}
   横書き：
 
   \underLineKK[color=red]{ああああ\footnote{あ}{ああああ}あああああ}
@@ -145,7 +154,161 @@
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \underLineKK{ああ\ruby{あ}{あ}あああああ}
-     \underLineKK{ああああああ}
+    \underLineKK{ああああああ}
+  }
+\end{OutPut}
+
+\subsection{\textbackslash overLineKK}
+このコマンドは\verb|\underLineKK|を使用しても作成が可能ですが、ショートカットとして用意しておきました。このコマンドは縦書き環境においては通常の\verb|\underLineKK|につけてあったルビ補正を抜いてあります。（This command can also be created using \verb|\underLineKK|, but it has been provided as a shortcut. In a vertical writing environment, this command omits the ruby adjustment that was included in the standard \verb|\underLineKK|.）
+
+\begin{SourceCode}{TeX}
+  \overLineKK[color=色]{引数}
+
+  \overLineKK[color=red]{あああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \overLineKK{ああ\ruby{あ}{あ}あああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \overLineKK[color=red]{あああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \overLineKK{ああ\ruby{あ}{あ}あああああ}
+  }
+\end{OutPut}
+
+\subsection{\textbackslash nijyusen, \textbackslash keshinijyusen}
+これらのコマンドは\verb|\underLineKK|を入れ子にすることでも作成が可能ですが、\verb|keshinijyusen|に関してはルビの有無による補正をなくしてあります。（These commands can also be created by nesting \verb|\underLineKK|, but for \verb|keshinijyusen|, the adjustment for the presence or absence of ruby has been removed.）
+
+\begin{SourceCode}{TeX}
+  \nijyusen[color=色, bottom=下線最下部の位置のずれ]{引数}
+  \keshinijyusen[color=色]{引数}
+
+  \nijyusen[color=red]{あああああああああ}
+  \keshinijyusen{ああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \nijyusen[color=red]{ああ\ruby{あ}{あ}あああああ}
+    \keshinijyusen{ああ\ruby{あ}{あ}あああああ}
+    \nijyusen[color=red]{あああああああ}
+    \keshinijyusen{あああああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \nijyusen[color=red]{あああああああああ}
+  \keshinijyusen{ああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \nijyusen[color=red]{ああ\ruby{あ}{あ}あああああ}
+    \keshinijyusen{ああ\ruby{あ}{あ}あああああ}
+    \nijyusen[color=red]{あああああああ}
+    \keshinijyusen{あああああああ}
+  }
+\end{OutPut}
+
+\subsection{\textbackslash thinHighLight, \textbackslash thickHighLight}
+これらは蛍光ペンを引いたような出力を提供するコマンドです。ルビの有無に対する挙動が\verb|\underLineKK|のそれとは少々異なり、単なる並行移動だけではなく線の太さ自体も追随して動くという仕様にしてあります。（These are commands that provide an output resembling a highlight made with a fluorescent marker. Their behavior regarding the presence or absence of ruby differs slightly from that of \verb|\underLineKK|, as they are designed not only to shift position but also to have the line thickness itself adjust accordingly.）
+
+\begin{SourceCode}{TeX}
+  \thinHighLight[color=色]{引数}
+  \thickHighLight[color=色]{引数}
+
+  \thinHighLight{あああああああああ}
+  \thickHighLight[color=green]{あああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \thinHighLight{あああ\ruby{あ}{あ}ああああ}
+    \thickHighLight[color=green]{ああ\ruby{あ}{あ}あああああ}
+    \thinHighLight{あああああああああ}
+    \thickHighLight[color=green]{あああああああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \thinHighLight{あああああああああ}
+  \thickHighLight[color=green]{あああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \thinHighLight{あああ\ruby{あ}{あ}ああああ}
+    \thickHighLight[color=green]{ああ\ruby{あ}{あ}あああああ}
+    \thinHighLight{あああああああああ}
+    \thickHighLight[color=green]{あああああああああ}
+  }
+\end{OutPut}
+
+\subsection{\textbackslash snamift}
+このコマンドは波線を引くコマンドを提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。（This command provides a wavy underline. Its behavior with respect to ruby is the same as that of \verb|\underLineKK|. When the star option is specified, the font remains unchanged; when the non-star version is used, the font is switched to a Gothic typeface.）
+
+\begin{SourceCode}{TeX}
+  \snamift[bottom=下線最下部の位置のずれ]{引数}
+  \snamift*[bottom=下線最下部の位置のずれ]{引数}
+
+  \snamift*{あああああああああ}
+  \snamift[bottom=.3em]{あああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \snamift*{あああ\ruby{あ}{あ}ああああ}
+    \snamift[bottom=.3em]{あああああああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \snamift*{あああああああああ}
+  \snamift[bottom=.5em]{あああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \snamift*{あああ\ruby{あ}{あ}ああああ}
+    \snamift[bottom=.3em]{あああああああああ}
+  }
+\end{OutPut}
+
+
+\subsection{\textbackslash stength, \textbackslash sdashgth}
+これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。
+
+\begin{SourceCode}{TeX}
+  \stength[bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
+  \sdashgth[bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
+
+  \stength*{あああああああああ}
+  \stength[radius=.05ex, distance=.3ex]{あああああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \snamift*{あああ\ruby{あ}{あ}ああああ}
+    \snamift[bottom=.3em]{あああああああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \snamift*{あああああああああ}
+  \snamift[bottom=.5em]{あああああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \snamift*{あああ\ruby{あ}{あ}ああああ}
+    \snamift[bottom=.3em]{あああああああああ}
   }
 \end{OutPut}
 
