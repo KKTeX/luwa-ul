@@ -6,6 +6,7 @@
 \usepackage{fp}
 \usepackage{lltjext}
 \usepackage{luatexja-ruby}
+\usepackage{KKsymbols}
 
 % You can omit these font settings.
 \RequirePackage[no-math]{fontspec}
@@ -112,6 +113,7 @@
   \item \verb|\nijyusen|, \verb|\keshinijyusen|
   \item \verb|\thinHighLight|, \verb|\thickHighLight|
   \item \verb|\stength|, \verb|\sdashgth|, \verb|\snamift|
+  \item \verb|\LineNumbering|
 \end{itemize}
 
 \subsection{\textbackslash underLineKK}
@@ -283,32 +285,71 @@
 
 
 \subsection{\textbackslash stength, \textbackslash sdashgth}
-これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。
+これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。（These commands provide dotted and dashed underlines, respectively.
+Their behavior toward ruby text is the same as that of \verb|\underLineKK|.
+When the starred option is used, the font remains unchanged; when the non-starred option is used, the text is typeset in a Gothic typeface.）
 
 \begin{SourceCode}{TeX}
   \stength[bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
+  % デフォルト：radius=.1ex, distance=.4ex
   \sdashgth[bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
+  % デフォルト：width=.2pt, distance=.3ex, length=.4ex
 
   \stength*{あああああああああ}
   \stength[radius=.05ex, distance=.3ex]{あああああああああ}
+  \sdashgth*{あああああああああ}
+  \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \snamift*{あああ\ruby{あ}{あ}ああああ}
-    \snamift[bottom=.3em]{あああああああああ}
+    \stength*{あああああ\ruby{あ}{あ}ああ}
+    \stength[radius=.05ex, distance=.3ex]{あああああああああ}
+    \sdashgth*{あああああ\ruby{あ}{あ}ああ}
+    \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
   }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
   横書き：
 
-  \snamift*{あああああああああ}
-  \snamift[bottom=.5em]{あああああああああ}
+  \stength*{あああああああああ}
+  \stength[radius=.05ex, distance=.3ex]{あああああああああ}
+  \sdashgth*{あああああああああ}
+  \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \snamift*{あああ\ruby{あ}{あ}ああああ}
-    \snamift[bottom=.3em]{あああああああああ}
+    \stength*{あああああ\ruby{あ}{あ}ああ}
+    \stength[radius=.05ex, distance=.3ex]{あああああああああ}
+    \sdashgth*{あああああ\ruby{あ}{あ}ああ}
+    \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
+  }
+\end{OutPut}
+
+\subsection{\textbackslash LineNumbering}
+下線に番号を振るためのコマンドです。これは私が作成した\texttt{KKsymbols}パッケージ（TeX Liveに収録済み）との併用をお勧めしています。スターオプションを付与すると、縦書きの時には引数の中身が回転します\footnote{横書きの時には出力に変化はありません。}。（This command assigns numbers to underlines.
+It is recommended to use it together with my \texttt{KKsymbols} package (already included in TeX Live).
+When the starred option is given, the contents of the argument are rotated in vertical writing\footnote{In horizontal writing, the output remains unchanged.}.）
+
+\begin{SourceCode}{TeX}
+  \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
+    \LineNumbering*{ア}\underLineKK{あああああああ}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
+
+  縦書き：
+
+  \parbox<t>[c][6cm][c]{3cm}{%
+    \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
+    \LineNumbering*{ア}\underLineKK{あああああああ}
   }
 \end{OutPut}
 

@@ -408,19 +408,19 @@
 
 
 %下線の前に番号を振る%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\linenumbering}[1]{\raisebox{-1ex}{\scalebox{.6}{#1}}}
+\newcommand{\linenumbering@luwa}[1]{\raisebox{-1ex}{\scalebox{.6}{#1}}}
 
 \newdimen\overtline@f@size
-\NewDocumentCommand{\tlinenumbering}{s m}{%
+\NewDocumentCommand{\tlinenumbering@luwa}{s m}{%
   \setlength{\overtline@f@size}{\f@size pt}%
   \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
 }}\hskip.15ex}
 
 \NewDocumentCommand{\LineNumbering}{ s m O{0ex} }{% 縦横両対応
   \ifnum\ltjgetparameter{direction}=3%
-    \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering*{#2}}}{\raisebox{#3}{\tlinenumbering{#2}}}%
+    \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering@luwa*{#2}}}{\raisebox{#3}{\tlinenumbering@luwa{#2}}}%
   \else
-    \raisebox{#3}{\linenumbering{#2}}%
+    \raisebox{#3}{\linenumbering@luwa{#2}}%
   \fi
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
