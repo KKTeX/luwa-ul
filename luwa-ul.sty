@@ -6,14 +6,6 @@
 \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
 \definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
 
-\@ifundefined{gth}{
-  \newcommand{\gth}[1]{\textgt{#1}}
-}{}
-
-\@ifundefined{ft}{
-  \newcommand{\ft}[1]{\textgt{#1}}
-}{}
-
 \newlength{\underLine@KK@Adjust@tmp}
 \newlength{\KKUL@bottom}
 \newlength{\KKUL@height}
@@ -144,9 +136,9 @@
     \fi%
   }}{{%
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{\ft{#3}}%
+      \csname beginUnderWavyState\number\snamift@id\endcsname{\textgt{#3}}%
     \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{\ft{#3}}%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{\textgt{#3}}%
     \fi%
   }}%
 }
@@ -203,9 +195,9 @@
     \fi%
   }}{{%
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{\gth{#3}}%
+      \csname beginUnderDottate\number\stength@id\endcsname{\textgt{#3}}%
     \else%
-      \csname beginUnderDot\number\stength@id\endcsname{\gth{#3}}%
+      \csname beginUnderDot\number\stength@id\endcsname{\textgt{#3}}%
     \fi%
   }}%
 }
@@ -264,9 +256,9 @@
     \fi%
   }}{{% 
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{\gth{#3}}%
+      \csname beginUnderDashtate\number\underdash@id\endcsname{\textgt{#3}}%
     \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{\gth{#3}}%
+      \csname beginUnderDash\number\underdash@id\endcsname{\textgt{#3}}%
     \fi%
   }}%
 }
