@@ -1,0 +1,20 @@
+luwa-ul
+================================================
+
+Version: 1.0.1
+Date: 2025-10-26
+Author: Kosei Kawaguchi a.k.a. KKTeX
+License: LPPL 1.3c
+
+Description:
+------------
+This package provides underlining and highlighting that remain intact even in vertical writing environments and when used together with ruby text.
+
+Dependencies:
+-------------
+luacolor, xcolor, lua-ul, calc, tikz
+
+Notice
+This package is **LuaLaTeX-only**. 
+
+See luwa-ul-doc.tex for usage examples.
