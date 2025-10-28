@@ -1,5 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/10/26, Version 1.0.1]
+\ProvidesPackage{luwa-ul}[2025/10/29, Version 1.0.1--dev]
+
+% \keshinijyusenは\underLineKKではなく\underLineベースに。
+% ルビ有無のフラグを使わない仕様に。
 
 
 \RequirePackage{luacolor, lua-ul, calc, tikz}
@@ -16,7 +19,7 @@
     \def\underLine@KK@Adjust@use@bottom{\dimexpr -#1+\underLine@KK@Adjust@tmp/2\relax}%
   \else%
     \def\underLine@KK@Adjust@use@bottom{\dimexpr #1-\underLine@KK@Adjust@tmp/7\relax}%
-  \fi
+  \fi%
 }
 
 \NewDocumentCommand{\underLine@KK@Adjust@height}{m}{%
@@ -24,7 +27,7 @@
     \def\underLine@KK@Adjust@use@height{#1}%
   \else%
     \def\underLine@KK@Adjust@use@height{#1}%
-  \fi
+  \fi%
 }
 
 \define@key{KKUL}{bottom}{%
@@ -53,6 +56,22 @@
   end
 }
 
+
+% 追記（2025/10/29）
+% Auto Depth Adjust System 
+\newlength{\temp@depth@kk}
+\NewDocumentCommand{\getdepth@kk}{m}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \settoheight{\temp@depth@kk}{#1}%
+    \addtolength{\temp@depth@kk}{-.5em}%
+    \setlength{\temp@depth@kk}{-\temp@depth@kk}%
+  \else%
+    \settodepth{\temp@depth@kk}{#1}%
+  \fi%
+}
+
+
+% ルビ以外のは見出しを許容する（見出しなどで見た目を損なわないためなど）
 \NewDocumentCommand{\underLineKK}{ O{} +m }{%
   % 初期化
   \underLine@KK@Adjust@bottom{-.1em}%
@@ -76,6 +95,23 @@
   \fi%
   % 実際の下線
   \underLine[bottom=\KKUL@bottom+\KKUL@rubyraise, height=\KKUL@height, color=\KKUL@color]{#2}%
+}
+
+
+% 深さに応じて変わるタイプ
+\NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
+  % 初期化
+  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@height{0.3pt}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+  \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  \def\KKUL@color{black}%
+  \def\underLineKK@test@contents{#2}%
+  \setkeys{KKUL}{#1}%
+  \getdepth@kk{\underLineKK@test@contents}%
+  % 実際の下線
+  \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -119,6 +155,57 @@
       \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
                           x=\f@size/12 pt,y=\f@size/25 pt]
         \begin{scope}[yshift=\f@size/1.2 pt]
+          \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+          \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+            (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+            sin (5,1) cos (6,0);
+        \end{scope}
+      \end{tikzpicture}%
+    }%
+  }%
+  % ４：使用（縦横の分岐。直接 csname を呼ぶ）
+  \IfBooleanTF{#1}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#3}%
+    \fi%
+  }}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{\textgt{#3}}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{\textgt{#3}}%
+    \fi%
+  }}%
+}
+
+\NewDocumentCommand{\snamiftAuto}{ s O{} +m }{%
+  % １：キーを先にセットして \snamift@bottom を更新
+  \setlength{\snamift@bottom}{0ex}%
+  \def\snamift@test@contents{#3}%
+  \setkeys{snamift}{#2}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \getdepth@kk{\snamift@test@contents}%
+  % ２：IDを進める
+  \global\advance\snamift@id by 1\relax%
+  % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
+  \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
+    \cleaders\hbox{%
+      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
+        \begin{scope}[yshift=-\temp@depth@kk]
+          \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+          \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+            (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+            sin (5,1) cos (6,0);
+        \end{scope}
+      \end{tikzpicture}%
+    }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
+    \cleaders\hbox{%
+      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
+                          x=\f@size/12 pt,y=\f@size/25 pt]
+        \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
           \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
           \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
             (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
@@ -203,6 +290,51 @@
 }
 
 
+\NewDocumentCommand{\stengthAuto}{ s O{} +m }{%
+  \setlength{\stength@radius}{.1ex}%
+  \setlength{\stength@distance}{.4ex}%
+  \setlength{\stength@bottom}{0ex}%
+  \def\stength@test@contents{#3}%
+  \setkeys{stength}{#2}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \getdepth@kk{\stength@test@contents}%
+  \global\advance\stength@id by 1\relax%
+  \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
+  \xleaders\hbox{%
+  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+    \begin{scope}[yshift=-\temp@depth@kk]
+      \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+      \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);%.8
+    \end{scope}
+  \end{tikzpicture}%
+  }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
+  \xleaders\hbox{%
+  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+    \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
+    \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+    \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
+    \end{scope}
+  \end{tikzpicture}%
+  }%
+  }%
+  \IfBooleanTF{#1}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{#3}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{#3}%
+    \fi%
+  }}{{%
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{\textgt{#3}}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{\textgt{#3}}%
+    \fi%
+  }}%
+}
+
+
 \newlength{\underdash@length}
 \newlength{\underdash@distance}
 \newlength{\underdash@width}
@@ -241,6 +373,52 @@
     \xleaders\hbox{%
       \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
         \begin{scope}[yshift=\f@size/1.2 pt]%
+          \draw[black,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+          \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+        \end{scope}%
+      \end{tikzpicture}%
+    }%
+  }%
+  %
+  \IfBooleanTF{#1}{{% 
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#3}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{#3}%
+    \fi%
+  }}{{% 
+    \ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{\textgt{#3}}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{\textgt{#3}}%
+    \fi%
+  }}%
+}
+
+\NewDocumentCommand{\sdashgthAuto}{ s O{} +m }{%
+  \setlength{\underdash@length}{.4ex}%
+  \setlength{\underdash@distance}{.3ex}%
+  \setlength{\underdash@width}{.2pt}%
+  \setlength{\underdash@bottom}{0ex}%
+  \def\sdashgth@test@contents{#3}%
+  \setkeys{underdashgth}{#2}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \getdepth@kk{\sdashgth@test@contents}%
+  \global\advance\underdash@id by 1\relax%
+  \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
+    \xleaders\hbox{%
+      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+        \begin{scope}[yshift=-\temp@depth@kk]
+          \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+          \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+        \end{scope}
+      \end{tikzpicture}%
+    }%
+  }%
+  \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
+    \xleaders\hbox{%
+      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+        \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]%
           \draw[black,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{scope}%
