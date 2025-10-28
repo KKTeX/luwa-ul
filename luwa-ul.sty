@@ -1,9 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/10/29, Version 1.0.1--dev]
-
-% \keshinijyusenは\underLineKKではなく\underLineベースに。
-% ルビ有無のフラグを使わない仕様に。
-
+\ProvidesPackage{luwa-ul}[2025/10/29, Version 1.1.0]
 
 \RequirePackage{luacolor, lua-ul, calc, tikz}
 \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
@@ -69,9 +65,18 @@
     \settodepth{\temp@depth@kk}{#1}%
   \fi%
 }
+\NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
+  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@height{0.3pt}%
+  \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+  \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  \def\KKUL@color{black}%
+  \def\underLineKK@test@contents{#2}%
+  \setkeys{KKUL}{#1}%
+  \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
+}
 
-
-% ルビ以外のは見出しを許容する（見出しなどで見た目を損なわないためなど）
+% ルビ以外のはみだしを許容する（見出しなどで見た目を損なわないためなど）
 \NewDocumentCommand{\underLineKK}{ O{} +m }{%
   % 初期化
   \underLine@KK@Adjust@bottom{-.1em}%
@@ -130,7 +135,6 @@
   \def\snamift@test@contents{#3}%
   \setkeys{snamift}{#2}%
   \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
-  % 縦書きの場合のみ傍線オフセット設定
   \ifnum\ltjgetparameter{direction}=3%
     \ifnum\UL@rubyflag=1%
       \addtolength{\snamift@bottom}{.5em}%
@@ -180,15 +184,12 @@
 }
 
 \NewDocumentCommand{\snamiftAuto}{ s O{} +m }{%
-  % １：キーを先にセットして \snamift@bottom を更新
   \setlength{\snamift@bottom}{0ex}%
   \def\snamift@test@contents{#3}%
   \setkeys{snamift}{#2}%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\snamift@test@contents}%
-  % ２：IDを進める
   \global\advance\snamift@id by 1\relax%
-  % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
   \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
     \cleaders\hbox{%
       \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
@@ -214,7 +215,6 @@
       \end{tikzpicture}%
     }%
   }%
-  % ４：使用（縦横の分岐。直接 csname を呼ぶ）
   \IfBooleanTF{#1}{{%
     \ifnum\ltjgetparameter{direction}=3 %
       \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
@@ -471,6 +471,33 @@
   \fi%
   \underLineKK[bottom=\overLineKK@KK@Adjust,color=\overLineKK@color]{#2}%
   }
+
+
+\newlength{\temp@depth@kk@over}
+\NewDocumentCommand{\getdepth@kk@over}{m}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \settodepth{\temp@depth@kk@over}{#1}%
+    \addtolength{\temp@depth@kk@over}{-.45em}%
+  \else%
+    \settoheight{\temp@depth@kk@over}{#1}%
+    \addtolength{\temp@depth@kk@over}{-.8em}%
+    \setlength{\temp@depth@kk@over}{-\temp@depth@kk@over}%
+  \fi%
+}
+\NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
+  \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+  \setlength{\temp@depth@kk@over}{0pt}%
+  \def\overLineKK@color{black}%
+  \def\overLineKK@test@contents{#2}%
+  \getdepth@kk@over{\overLineKK@test@contents}%
+  \setkeys{overLine}{#1}%
+  \ifnum\ltjgetparameter{direction}=3%
+    \addtolength{\overLineKK@KK@Adjust}{.1em}%
+  \else%
+    \addtolength{\overLineKK@KK@Adjust}{.1em}%
+  \fi%
+  \underLineKK@plain[bottom=\overLineKK@KK@Adjust-\temp@depth@kk@over,color=\overLineKK@color]{#2}%
+  }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -550,6 +577,21 @@
   \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]{\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
 }
 
+\NewDocumentCommand\nijyusenAuto{ O{} +m }{%
+  \def\nijyusen@KK@color{black}%
+  \def\nijyusen@test@contents{#2}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \getdepth@kk{\nijyusen@test@contents}%
+  \setlength{\nijyusen@bottom}{0ex}%
+  \setkeys{nijyusen}{#1}%
+  \ifnum\ltjgetparameter{direction}=3%
+    \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
+  \else%
+    \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
+  \fi%
+  \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]{\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
+}
+
 
 \newlength{\keshinijyuusen@KK@Adjust}
 \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
@@ -565,14 +607,7 @@
   \def\keshinijyusen@test@contents{#2}%
   \setkeys{keshinijyusen}{#1}%
   \keshinijyuusen@KK@Adjust@tmp%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\keshinijyusen@test@contents}}")}\relax}%
-  % 縦書きの場合のみ傍線オフセット設定
-  \ifnum\ltjgetparameter{direction}=3
-    \ifnum\UL@rubyflag=1
-      \addtolength{\keshinijyuusen@KK@Adjust}{.5em}%
-    \fi
-  \fi
-  \underLineKK[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
+  \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
