@@ -78,7 +78,6 @@
 
 % ルビ以外のはみだしを許容する（見出しなどで見た目を損なわないためなど）
 \NewDocumentCommand{\underLineKK}{ O{} +m }{%
-  % 初期化
   \underLine@KK@Adjust@bottom{-.1em}%
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
@@ -87,7 +86,6 @@
   \def\underLineKK@test@contents{#2}%
   \setkeys{KKUL}{#1}%
   \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\underLineKK@test@contents}}")}\relax}%
-  % 縦書きの場合のみ傍線オフセット設定
   \ifnum\ltjgetparameter{direction}=3%
     \ifnum\UL@rubyflag=1%
       \setlength{\KKUL@rubyraise}{.5em}%
@@ -95,17 +93,14 @@
       \setlength{\KKUL@rubyraise}{0em}%
     \fi%
   \else%
-    % 横書き時は補正なし
     \setlength{\KKUL@rubyraise}{0em}%
   \fi%
-  % 実際の下線
   \underLine[bottom=\KKUL@bottom+\KKUL@rubyraise, height=\KKUL@height, color=\KKUL@color]{#2}%
 }
 
 
 % 深さに応じて変わるタイプ
-\NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
-  % 初期化
+\NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
   \underLine@KK@Adjust@bottom{-.1em}%
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\temp@depth@kk}{0pt}%
@@ -115,25 +110,36 @@
   \def\underLineKK@test@contents{#2}%
   \setkeys{KKUL}{#1}%
   \getdepth@kk{\underLineKK@test@contents}%
-  % 実際の下線
   \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
+}
+\NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
+  \ifmmode
+    \mathchoice
+      {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptstyle
+      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+  \else
+    \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+  \fi
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%lua-ulで作ったsnamift%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newlength{\snamift@bottom}\setlength{\snamift@bottom}{0ex}
 \define@key{snamift}{bottom}{%
   \setlength{\snamift@bottom}{#1}%
 }
 
-\newcount\snamift@id  % 呼び出しカウンタ
+% 名称変更用のカウンター（グローバル変数）
+\newcount\snamift@id
 
-\NewDocumentCommand{\snamift}{ s O{} +m }{%
+\NewDocumentCommand{\namiKK}{ O{} +m }{%
   % １：キーを先にセットして \snamift@bottom を更新
   \setlength{\snamift@bottom}{0ex}%
-  \def\snamift@test@contents{#3}%
-  \setkeys{snamift}{#2}%
+  \def\snamift@test@contents{#2}%
+  \setkeys{snamift}{#1}%
   \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
   \ifnum\ltjgetparameter{direction}=3%
     \ifnum\UL@rubyflag=1%
@@ -167,26 +173,18 @@
       \end{tikzpicture}%
     }%
   }%
-  % ４：使用（縦横の分岐。直接 csname を呼ぶ）
-  \IfBooleanTF{#1}{{%
+  % ４：使用（縦横の分岐；直接 csname を呼ぶ）
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
     \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#3}%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
     \fi%
-  }}{{%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
 }
 
-\NewDocumentCommand{\snamiftAuto}{ s O{} +m }{%
+\NewDocumentCommand{\namiKKAuto@make}{ O{} +m }{%
   \setlength{\snamift@bottom}{0ex}%
-  \def\snamift@test@contents{#3}%
-  \setkeys{snamift}{#2}%
+  \def\snamift@test@contents{#2}%
+  \setkeys{snamift}{#1}%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\snamift@test@contents}%
   \global\advance\snamift@id by 1\relax%
@@ -215,24 +213,27 @@
       \end{tikzpicture}%
     }%
   }%
-  \IfBooleanTF{#1}{{%
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
     \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#3}%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
     \fi%
-  }}{{%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
+}
+\NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
+  \ifmmode
+    \mathchoice
+      {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptstyle
+      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+  \else
+    \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+  \fi
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%lua-ulで作ったstength,stendash%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）%%%%%%%%%%%%%%%%%%%%%
 \newlength{\stength@radius}
 \newlength{\stength@distance}
 \newlength{\stength@bottom}
@@ -243,12 +244,12 @@
 
 \newcount\stength@id  
 
-\NewDocumentCommand{\stength}{ s O{} +m }{%
+\NewDocumentCommand{\tenKK}{ O{} +m }{%
   \setlength{\stength@radius}{.1ex}%
   \setlength{\stength@distance}{.4ex}%
   \setlength{\stength@bottom}{0ex}%
-  \def\stength@test@contents{#3}%
-  \setkeys{stength}{#2}%
+  \def\stength@test@contents{#2}%
+  \setkeys{stength}{#1}%
   \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\stength@test@contents}}")}\relax}%
   \ifnum\ltjgetparameter{direction}=3
     \ifnum\UL@rubyflag=1
@@ -274,28 +275,30 @@
   \end{tikzpicture}%
   }%
   }%
-  \IfBooleanTF{#1}{{%
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#3}%
+      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
     \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#3}%
+      \csname beginUnderDot\number\stength@id\endcsname{#2}%
     \fi%
-  }}{{%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
+}
+\NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
+  \ifmmode
+    \mathchoice
+      {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptstyle
+      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+  \else
+    \tenKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+  \fi
 }
 
-
-\NewDocumentCommand{\stengthAuto}{ s O{} +m }{%
+\NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
   \setlength{\stength@radius}{.1ex}%
   \setlength{\stength@distance}{.4ex}%
   \setlength{\stength@bottom}{0ex}%
-  \def\stength@test@contents{#3}%
-  \setkeys{stength}{#2}%
+  \def\stength@test@contents{#2}%
+  \setkeys{stength}{#1}%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\stength@test@contents}%
   \global\advance\stength@id by 1\relax%
@@ -319,19 +322,11 @@
   \end{tikzpicture}%
   }%
   }%
-  \IfBooleanTF{#1}{{%
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#3}%
+      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
     \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#3}%
+      \csname beginUnderDot\number\stength@id\endcsname{#2}%
     \fi%
-  }}{{%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
 }
 
 
@@ -347,13 +342,13 @@
 
 \newcount\underdash@id 
 
-\NewDocumentCommand{\sdashgth}{ s O{} +m }{%
+\NewDocumentCommand{\dashKK}{ O{} +m }{%
   \setlength{\underdash@length}{.4ex}%
   \setlength{\underdash@distance}{.3ex}%
   \setlength{\underdash@width}{.2pt}%
   \setlength{\underdash@bottom}{0ex}%
-  \def\sdashgth@test@contents{#3}%
-  \setkeys{underdashgth}{#2}%
+  \def\sdashgth@test@contents{#2}%
+  \setkeys{underdashgth}{#1}%
   \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\sdashgth@test@contents}}")}\relax}%
   \ifnum\ltjgetparameter{direction}=3
     \ifnum\UL@rubyflag=1
@@ -379,29 +374,20 @@
       \end{tikzpicture}%
     }%
   }%
-  %
-  \IfBooleanTF{#1}{{% 
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#3}%
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
     \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#3}%
+      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
     \fi%
-  }}{{% 
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
 }
 
-\NewDocumentCommand{\sdashgthAuto}{ s O{} +m }{%
+\NewDocumentCommand{\dashKKAuto@make}{ O{} +m }{%
   \setlength{\underdash@length}{.4ex}%
   \setlength{\underdash@distance}{.3ex}%
   \setlength{\underdash@width}{.2pt}%
   \setlength{\underdash@bottom}{0ex}%
-  \def\sdashgth@test@contents{#3}%
-  \setkeys{underdashgth}{#2}%
+  \def\sdashgth@test@contents{#2}%
+  \setkeys{underdashgth}{#1}%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\sdashgth@test@contents}%
   \global\advance\underdash@id by 1\relax%
@@ -425,20 +411,22 @@
       \end{tikzpicture}%
     }%
   }%
-  %
-  \IfBooleanTF{#1}{{% 
     \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#3}%
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
     \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#3}%
+      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
     \fi%
-  }}{{% 
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{\textgt{#3}}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{\textgt{#3}}%
-    \fi%
-  }}%
+}
+\NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
+  \ifmmode
+    \mathchoice
+      {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptstyle
+      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+  \else
+    \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+  \fi
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -577,7 +565,7 @@
   \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]{\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
 }
 
-\NewDocumentCommand\nijyusenAuto{ O{} +m }{%
+\NewDocumentCommand{\nijyusenAuto@make}{ O{} +m }{%
   \def\nijyusen@KK@color{black}%
   \def\nijyusen@test@contents{#2}%
   \setlength{\temp@depth@kk}{0pt}%
@@ -591,6 +579,17 @@
   \fi%
   \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]{\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
 }
+\NewDocumentCommand{\nijyusenAuto}{ O{} +m }{%
+  \ifmmode
+    \mathchoice
+      {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % textstyle (inline)
+      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptstyle
+      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+  \else
+    \nijyusenAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+  \fi
+}
 
 
 \newlength{\keshinijyuusen@KK@Adjust}
@@ -602,7 +601,7 @@
   \fi
 }
 \define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
-\NewDocumentCommand\keshinijyusen{ O{} +m }{%
+\NewDocumentCommand{\keshinijyusen}{ O{} +m }{%
   \def\keshinijyusen@KK@color{color=black}%
   \def\keshinijyusen@test@contents{#2}%
   \setkeys{keshinijyusen}{#1}%
