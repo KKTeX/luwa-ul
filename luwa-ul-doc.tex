@@ -123,7 +123,7 @@
   \item \verb|\underLineKK|, \verb|\overLineKK|
   \item \verb|\nijyusen|, \verb|\keshinijyusen|
   \item \verb|\thinHighLight|, \verb|\thickHighLight|
-  \item \verb|\stength|, \verb|\sdashgth|, \verb|\snamift|
+  \item \verb|\tenKK|, \verb|\dashKK|, \verb|\namiKK|
   \item \verb|\LineNumbering|
 \end{itemize}
 
@@ -264,76 +264,74 @@
   }
 \end{OutPut}
 
-\subsection{\textbackslash snamift}
-このコマンドは波線を引くコマンドを提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。（This command provides a wavy underline. Its behavior with respect to ruby is the same as that of \verb|\underLineKK|. When the star option is specified, the font remains unchanged; when the non-star version is used, the font is switched to a Gothic typeface.）
+\subsection{\textbackslash namiKK}
+このコマンドは波線を引くコマンドを提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。（This command provides a wavy underline. Its behavior with respect to ruby is the same as that of \verb|\underLineKK|. ）
 
 \begin{SourceCode}{TeX}
-  \snamift[bottom=下線最下部の位置のずれ]{引数}
-  \snamift*[bottom=下線最下部の位置のずれ]{引数}
+  \namiKK[bottom=下線最下部の位置のずれ]{引数}
 
-  \snamift*{あああああああああ}
-  \snamift[bottom=.3em]{あああああああああ}
+  \namiKK[bottom=.3em]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \snamift*{あああ\ruby{あ}{あ}ああああ}
-    \snamift[bottom=.3em]{あああああああああ}
+    \namiKK{あああ\ruby{あ}{あ}ああああ}
+    \namiKK[bottom=.3em]{あああああああああ}
   }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
   横書き：
 
-  \snamift*{あああああああああ}
-  \snamift[bottom=.5em]{あああああああああ}
+  \namiKK{あああああああああ}
+  \namiKK[bottom=.3em]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \snamift*{あああ\ruby{あ}{あ}ああああ}
-    \snamift[bottom=.3em]{あああああああああ}
+    \namiKK{あああ\ruby{あ}{あ}ああああ}
+    \namiKK[bottom=.3em]{あああああああああ}
   }
 \end{OutPut}
 
 
-\subsection{\textbackslash stength, \textbackslash sdashgth}
+\subsection{\textbackslash tenKK, \textbackslash dashKK}
 これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。スターオプションありの時はフォントはそのまま、スターオプションありの場合にはゴシック体になります。（These commands provide dotted and dashed underlines, respectively.
 Their behavior toward ruby text is the same as that of \verb|\underLineKK|.
 When the starred option is used, the font remains unchanged; when the non-starred option is used, the text is typeset in a Gothic typeface.）
 
 \begin{SourceCode}{TeX}
-  \stength[bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
+  \tenKK[bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
   % デフォルト：radius=.1ex, distance=.4ex
-  \sdashgth[bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
+  \dashKK[bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
   % デフォルト：width=.2pt, distance=.3ex, length=.4ex
 
-  \stength*{あああああああああ}
-  \stength[radius=.05ex, distance=.3ex]{あああああああああ}
-  \sdashgth*{あああああああああ}
-  \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
+  \tenKK{あああああああああ}
+  \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+  \dashKK{あああああああああ}
+  \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \stength*{あああああ\ruby{あ}{あ}ああ}
-    \stength[radius=.05ex, distance=.3ex]{あああああああああ}
-    \sdashgth*{あああああ\ruby{あ}{あ}ああ}
-    \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
+    \tenKK{あああああ\ruby{あ}{あ}ああ}
+    \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+    \dashKK{あああああ\ruby{あ}{あ}ああ}
+    \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
   }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
   横書き：
 
-  \stength*{あああああああああ}
-  \stength[radius=.05ex, distance=.3ex]{あああああああああ}
-  \sdashgth*{あああああああああ}
-  \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
+  \tenKK{あああああああああ}
+  \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+  \dashKK{あああああああああ}
+  \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \stength*{あああああ\ruby{あ}{あ}ああ}
-    \stength[radius=.05ex, distance=.3ex]{あああああああああ}
-    \sdashgth*{あああああ\ruby{あ}{あ}ああ}
-    \sdashgth[length=.01ex, distance=.1ex]{あああああああああ}
+    \tenKK{あああああ\ruby{あ}{あ}ああ}
+    \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+    \dashKK{あああああ\ruby{あ}{あ}ああ}
+    \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
   }
 \end{OutPut}
 
@@ -375,8 +373,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 \section{Source Code}
 \begin{lstlisting}
   \NeedsTeXFormat{LaTeX2e}
-  \ProvidesPackage{luwa-ul}[2025/10/26, Version 1.0.1]
-
+  \ProvidesPackage{luwa-ul}[2025/10/29, Version 1.1.0-- now developping...]
 
   \RequirePackage{luacolor, lua-ul, calc, tikz}
   \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
@@ -392,7 +389,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \def\underLine@KK@Adjust@use@bottom{\dimexpr -#1+\underLine@KK@Adjust@tmp/2\relax}%
     \else%
       \def\underLine@KK@Adjust@use@bottom{\dimexpr #1-\underLine@KK@Adjust@tmp/7\relax}%
-    \fi
+    \fi%
   }
 
   \NewDocumentCommand{\underLine@KK@Adjust@height}{m}{%
@@ -400,7 +397,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \def\underLine@KK@Adjust@use@height{#1}%
     \else%
       \def\underLine@KK@Adjust@use@height{#1}%
-    \fi
+    \fi%
   }
 
   \define@key{KKUL}{bottom}{%
@@ -429,8 +426,32 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     end
   }
 
+
+  % 追記（2025/10/29）
+  % Auto Depth Adjust System 
+  \newlength{\temp@depth@kk}
+  \NewDocumentCommand{\getdepth@kk}{m}{%
+    \ifnum\ltjgetparameter{direction}=3%
+      \settoheight{\temp@depth@kk}{#1}%
+      \addtolength{\temp@depth@kk}{-.5em}%
+      \setlength{\temp@depth@kk}{-\temp@depth@kk}%
+    \else%
+      \settodepth{\temp@depth@kk}{#1}%
+    \fi%
+  }
+  \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
+    \underLine@KK@Adjust@bottom{-.1em}%
+    \underLine@KK@Adjust@height{0.3pt}%
+    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+    \def\KKUL@color{black}%
+    \def\underLineKK@test@contents{#2}%
+    \setkeys{KKUL}{#1}%
+    \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
+  }
+
+  % ルビ以外のはみだしを許容する（見出しなどで見た目を損なわないためなど）
   \NewDocumentCommand{\underLineKK}{ O{} +m }{%
-    % 初期化
     \underLine@KK@Adjust@bottom{-.1em}%
     \underLine@KK@Adjust@height{0.3pt}%
     \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
@@ -439,7 +460,6 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \def\underLineKK@test@contents{#2}%
     \setkeys{KKUL}{#1}%
     \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\underLineKK@test@contents}}")}\relax}%
-    % 縦書きの場合のみ傍線オフセット設定
     \ifnum\ltjgetparameter{direction}=3%
       \ifnum\UL@rubyflag=1%
         \setlength{\KKUL@rubyraise}{.5em}%
@@ -447,30 +467,54 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
         \setlength{\KKUL@rubyraise}{0em}%
       \fi%
     \else%
-      % 横書き時は補正なし
       \setlength{\KKUL@rubyraise}{0em}%
     \fi%
-    % 実際の下線
     \underLine[bottom=\KKUL@bottom+\KKUL@rubyraise, height=\KKUL@height, color=\KKUL@color]{#2}%
+  }
+
+
+  % 深さに応じて変わるタイプ
+  \NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
+    \underLine@KK@Adjust@bottom{-.1em}%
+    \underLine@KK@Adjust@height{0.3pt}%
+    \setlength{\temp@depth@kk}{0pt}%
+    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+    \def\KKUL@color{black}%
+    \def\underLineKK@test@contents{#2}%
+    \setkeys{KKUL}{#1}%
+    \getdepth@kk{\underLineKK@test@contents}%
+    \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
+  }
+  \NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
+    \ifmmode
+      \mathchoice
+        {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptstyle
+        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+    \else
+      \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \fi
   }
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-  %lua-ulで作ったsnamift%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \newlength{\snamift@bottom}\setlength{\snamift@bottom}{0ex}
   \define@key{snamift}{bottom}{%
     \setlength{\snamift@bottom}{#1}%
   }
 
-  \newcount\snamift@id  % 呼び出しカウンタ
+  % 名称変更用のカウンター（グローバル変数）
+  \newcount\snamift@id
 
-  \NewDocumentCommand{\snamift}{ s O{} +m }{%
+  \NewDocumentCommand{\namiKK}{ O{} +m }{%
     % １：キーを先にセットして \snamift@bottom を更新
     \setlength{\snamift@bottom}{0ex}%
-    \def\snamift@test@contents{#3}%
-    \setkeys{snamift}{#2}%
+    \def\snamift@test@contents{#2}%
+    \setkeys{snamift}{#1}%
     \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
-    % 縦書きの場合のみ傍線オフセット設定
     \ifnum\ltjgetparameter{direction}=3%
       \ifnum\UL@rubyflag=1%
         \addtolength{\snamift@bottom}{.5em}%
@@ -503,25 +547,67 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
         \end{tikzpicture}%
       }%
     }%
-    % ４：使用（縦横の分岐。直接 csname を呼ぶ）
-    \IfBooleanTF{#1}{{%
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderWavyState\number\snamift@id\endcsname{#3}%
-      \else%
-        \csname beginUnderWavyS\number\snamift@id\endcsname{#3}%
-      \fi%
-    }}{{%
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderWavyState\number\snamift@id\endcsname{\textgt{#3}}%
-      \else%
-        \csname beginUnderWavyS\number\snamift@id\endcsname{\textgt{#3}}%
-      \fi%
-    }}%
+    % ４：使用（縦横の分岐；直接 csname を呼ぶ）
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
+    \fi}%
+  }
+
+  \NewDocumentCommand{\namiKKAuto@make}{ O{} +m }{%
+    \setlength{\snamift@bottom}{0ex}%
+    \def\snamift@test@contents{#2}%
+    \setkeys{snamift}{#1}%
+    \setlength{\temp@depth@kk}{0pt}%
+    \getdepth@kk{\snamift@test@contents}%
+    \global\advance\snamift@id by 1\relax%
+    \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
+      \cleaders\hbox{%
+        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
+          \begin{scope}[yshift=-\temp@depth@kk]
+            \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+            \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+              (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+              sin (5,1) cos (6,0);
+          \end{scope}
+        \end{tikzpicture}%
+      }%
+    }%
+    \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
+      \cleaders\hbox{%
+        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
+                            x=\f@size/12 pt,y=\f@size/25 pt]
+          \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
+            \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+            \draw[line width=\f@size/24 pt,yshift=\snamift@bottom]
+              (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
+              sin (5,1) cos (6,0);
+          \end{scope}
+        \end{tikzpicture}%
+      }%
+    }%
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
+    \else%
+      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
+    \fi}%
+  }
+  \NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
+    \ifmmode
+      \mathchoice
+        {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptstyle
+        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+    \else
+      \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \fi
   }
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-  %lua-ulで作ったstength,stendash%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）%%%%%%%%%%%%%%%%%%%%%
   \newlength{\stength@radius}
   \newlength{\stength@distance}
   \newlength{\stength@bottom}
@@ -532,12 +618,12 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 
   \newcount\stength@id  
 
-  \NewDocumentCommand{\stength}{ s O{} +m }{%
+  \NewDocumentCommand{\tenKK}{ O{} +m }{%
     \setlength{\stength@radius}{.1ex}%
     \setlength{\stength@distance}{.4ex}%
     \setlength{\stength@bottom}{0ex}%
-    \def\stength@test@contents{#3}%
-    \setkeys{stength}{#2}%
+    \def\stength@test@contents{#2}%
+    \setkeys{stength}{#1}%
     \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\stength@test@contents}}")}\relax}%
     \ifnum\ltjgetparameter{direction}=3
       \ifnum\UL@rubyflag=1
@@ -563,19 +649,58 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \end{tikzpicture}%
     }%
     }%
-    \IfBooleanTF{#1}{{%
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderDottate\number\stength@id\endcsname{#3}%
-      \else%
-        \csname beginUnderDot\number\stength@id\endcsname{#3}%
-      \fi%
-    }}{{%
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderDottate\number\stength@id\endcsname{\textgt{#3}}%
-      \else%
-        \csname beginUnderDot\number\stength@id\endcsname{\textgt{#3}}%
-      \fi%
-    }}%
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{#2}%
+    \fi}%
+  }
+  \NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
+    \ifmmode
+      \mathchoice
+        {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptstyle
+        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+    \else
+      \tenKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \fi
+  }
+
+  \NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
+    \setlength{\stength@radius}{.1ex}%
+    \setlength{\stength@distance}{.4ex}%
+    \setlength{\stength@bottom}{0ex}%
+    \def\stength@test@contents{#2}%
+    \setkeys{stength}{#1}%
+    \setlength{\temp@depth@kk}{0pt}%
+    \getdepth@kk{\stength@test@contents}%
+    \global\advance\stength@id by 1\relax%
+    \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
+    \xleaders\hbox{%
+    \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+      \begin{scope}[yshift=-\temp@depth@kk]
+        \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+        \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);%.8
+      \end{scope}
+    \end{tikzpicture}%
+    }%
+    }%
+    \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
+    \xleaders\hbox{%
+    \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+      \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
+      \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
+      \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
+      \end{scope}
+    \end{tikzpicture}%
+    }%
+    }%
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
+    \else%
+      \csname beginUnderDot\number\stength@id\endcsname{#2}%
+    \fi}%
   }
 
 
@@ -591,13 +716,13 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 
   \newcount\underdash@id 
 
-  \NewDocumentCommand{\sdashgth}{ s O{} +m }{%
+  \NewDocumentCommand{\dashKK}{ O{} +m }{%
     \setlength{\underdash@length}{.4ex}%
     \setlength{\underdash@distance}{.3ex}%
     \setlength{\underdash@width}{.2pt}%
     \setlength{\underdash@bottom}{0ex}%
-    \def\sdashgth@test@contents{#3}%
-    \setkeys{underdashgth}{#2}%
+    \def\sdashgth@test@contents{#2}%
+    \setkeys{underdashgth}{#1}%
     \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\sdashgth@test@contents}}")}\relax}%
     \ifnum\ltjgetparameter{direction}=3
       \ifnum\UL@rubyflag=1
@@ -623,20 +748,59 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
         \end{tikzpicture}%
       }%
     }%
-    %
-    \IfBooleanTF{#1}{{% 
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderDashtate\number\underdash@id\endcsname{#3}%
-      \else%
-        \csname beginUnderDash\number\underdash@id\endcsname{#3}%
-      \fi%
-    }}{{% 
-      \ifnum\ltjgetparameter{direction}=3 %
-        \csname beginUnderDashtate\number\underdash@id\endcsname{\textgt{#3}}%
-      \else%
-        \csname beginUnderDash\number\underdash@id\endcsname{\textgt{#3}}%
-      \fi%
-    }}%
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
+    \fi}%
+  }
+
+  \NewDocumentCommand{\dashKKAuto@make}{ O{} +m }{%
+    \setlength{\underdash@length}{.4ex}%
+    \setlength{\underdash@distance}{.3ex}%
+    \setlength{\underdash@width}{.2pt}%
+    \setlength{\underdash@bottom}{0ex}%
+    \def\sdashgth@test@contents{#2}%
+    \setkeys{underdashgth}{#1}%
+    \setlength{\temp@depth@kk}{0pt}%
+    \getdepth@kk{\sdashgth@test@contents}%
+    \global\advance\underdash@id by 1\relax%
+    \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
+      \xleaders\hbox{%
+        \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+          \begin{scope}[yshift=-\temp@depth@kk]
+            \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+            \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+          \end{scope}
+        \end{tikzpicture}%
+      }%
+    }%
+    \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
+      \xleaders\hbox{%
+        \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+          \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]%
+            \draw[black,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+            \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+          \end{scope}%
+        \end{tikzpicture}%
+      }%
+    }%
+    {\ifnum\ltjgetparameter{direction}=3 %
+      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
+    \else%
+      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
+    \fi}%
+  }
+  \NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
+    \ifmmode
+      \mathchoice
+        {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
+        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptstyle
+        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+    \else
+      \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \fi
   }
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -668,6 +832,33 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \fi%
     \fi%
     \underLineKK[bottom=\overLineKK@KK@Adjust,color=\overLineKK@color]{#2}%
+    }
+
+
+  \newlength{\temp@depth@kk@over}
+  \NewDocumentCommand{\getdepth@kk@over}{m}{%
+    \ifnum\ltjgetparameter{direction}=3%
+      \settodepth{\temp@depth@kk@over}{#1}%
+      \addtolength{\temp@depth@kk@over}{-.45em}%
+    \else%
+      \settoheight{\temp@depth@kk@over}{#1}%
+      \addtolength{\temp@depth@kk@over}{-.8em}%
+      \setlength{\temp@depth@kk@over}{-\temp@depth@kk@over}%
+    \fi%
+  }
+  \NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
+    \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+    \setlength{\temp@depth@kk@over}{0pt}%
+    \def\overLineKK@color{black}%
+    \def\overLineKK@test@contents{#2}%
+    \getdepth@kk@over{\overLineKK@test@contents}%
+    \setkeys{overLine}{#1}%
+    \ifnum\ltjgetparameter{direction}=3%
+      \addtolength{\overLineKK@KK@Adjust}{.1em}%
+    \else%
+      \addtolength{\overLineKK@KK@Adjust}{.1em}%
+    \fi%
+    \underLineKK@plain[bottom=\overLineKK@KK@Adjust-\temp@depth@kk@over,color=\overLineKK@color]{#2}%
     }
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -748,6 +939,32 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]{\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
   }
 
+  \NewDocumentCommand{\nijyusenAuto@make}{ O{} +m }{%
+    \def\nijyusen@KK@color{black}%
+    \def\nijyusen@test@contents{#2}%
+    \setlength{\temp@depth@kk}{0pt}%
+    \getdepth@kk{\nijyusen@test@contents}%
+    \setlength{\nijyusen@bottom}{0ex}%
+    \setkeys{nijyusen}{#1}%
+    \ifnum\ltjgetparameter{direction}=3%
+      \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
+    \else%
+      \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
+    \fi%
+    \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]{\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
+  }
+  \NewDocumentCommand{\nijyusenAuto}{ O{} +m }{%
+    \ifmmode
+      \mathchoice
+        {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
+        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % textstyle (inline)
+        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptstyle
+        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+    \else
+      \nijyusenAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \fi
+  }
+
 
   \newlength{\keshinijyuusen@KK@Adjust}
   \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
@@ -758,19 +975,12 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \fi
   }
   \define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
-  \NewDocumentCommand\keshinijyusen{ O{} +m }{%
+  \NewDocumentCommand{\keshinijyusen}{ O{} +m }{%
     \def\keshinijyusen@KK@color{color=black}%
     \def\keshinijyusen@test@contents{#2}%
     \setkeys{keshinijyusen}{#1}%
     \keshinijyuusen@KK@Adjust@tmp%
-    \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\keshinijyusen@test@contents}}")}\relax}%
-    % 縦書きの場合のみ傍線オフセット設定
-    \ifnum\ltjgetparameter{direction}=3
-      \ifnum\UL@rubyflag=1
-        \addtolength{\keshinijyuusen@KK@Adjust}{.5em}%
-      \fi
-    \fi
-    \underLineKK[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
+    \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
   }
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

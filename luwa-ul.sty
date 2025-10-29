@@ -174,11 +174,11 @@
     }%
   }%
   % ４：使用（縦横の分岐；直接 csname を呼ぶ）
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
+  \else%
+    \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
+  \fi}%
 }
 
 \NewDocumentCommand{\namiKKAuto@make}{ O{} +m }{%
@@ -213,11 +213,11 @@
       \end{tikzpicture}%
     }%
   }%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
+  \else%
+    \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
+  \fi}%
 }
 \NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
   \ifmmode
@@ -275,11 +275,11 @@
   \end{tikzpicture}%
   }%
   }%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderDottate\number\stength@id\endcsname{#2}%
+  \else%
+    \csname beginUnderDot\number\stength@id\endcsname{#2}%
+  \fi}%
 }
 \NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
   \ifmmode
@@ -322,11 +322,11 @@
   \end{tikzpicture}%
   }%
   }%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderDottate\number\stength@id\endcsname{#2}%
+  \else%
+    \csname beginUnderDot\number\stength@id\endcsname{#2}%
+  \fi}%
 }
 
 
@@ -374,11 +374,11 @@
       \end{tikzpicture}%
     }%
   }%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
+  \else%
+    \csname beginUnderDash\number\underdash@id\endcsname{#2}%
+  \fi}%
 }
 
 \NewDocumentCommand{\dashKKAuto@make}{ O{} +m }{%
@@ -411,11 +411,11 @@
       \end{tikzpicture}%
     }%
   }%
-    \ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
-    \fi%
+  {\ifnum\ltjgetparameter{direction}=3 %
+    \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
+  \else%
+    \csname beginUnderDash\number\underdash@id\endcsname{#2}%
+  \fi}%
 }
 \NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
   \ifmmode
