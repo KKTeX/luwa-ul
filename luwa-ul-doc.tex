@@ -88,7 +88,7 @@
 
 \title{\texttt{luwa-ul} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.0.1 (2025/10/26)}
+\date{Version 1.1.0 (2025/10/29)}
 
 \begin{document}
 \begin{titlepage}
@@ -119,12 +119,20 @@
 提供されるコマンドは以下の通りです。要望に応じて追加されることもありえます。
 （The provided commands are as follows. I would add some more commands upon requests.）
 
+\noindent 1.Manual
 \begin{itemize}
   \item \verb|\underLineKK|, \verb|\overLineKK|
   \item \verb|\nijyusen|, \verb|\keshinijyusen|
   \item \verb|\thinHighLight|, \verb|\thickHighLight|
   \item \verb|\tenKK|, \verb|\dashKK|, \verb|\namiKK|
   \item \verb|\LineNumbering|
+\end{itemize}
+
+\noindent 2.Auto
+\begin{itemize}
+  \item \verb|\underLineKKAuto|, \verb|\overLineKKAuto|
+  \item \verb|\nijyusenAuto|
+  \item \verb|\tenKKAuto|, \verb|\dashKKAuto|, \verb|\namiKKAuto|
 \end{itemize}
 
 \subsection{\textbackslash underLineKK}
@@ -360,12 +368,82 @@ When the starred option is given, the contents of the argument are rotated in ve
   }
 \end{OutPut}
 
+\subsection{自動調節シリーズ（Auto Series）}
+このシリーズは、v1.1.0にて追加された新たなモデルで、主に積分記号などの大きな記号が引数内部に含まれる場合に威力を発揮するコマンド群です。（These commands are added on v1.1.0 update. When you include \verb|\int| or so in the argument, the difference between Manual Series and Auto Series are critcal.）通常のManual Seriesとの違いは（You can see how defferent they are as follows: ）
+
+\begin{SourceCode}{TeX}
+  \underLineKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+  \underLineKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+  \namiKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+  \namiKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+  \[\underLineKK{\int_{a}^{b} f(x) \, dx}\]
+  \[\underLineKKAuto{\int_{a}^{b} f(x) \, dx}\]
+  \[\namiKK{\int_{a}^{b} f(x) \, dx}\]
+  \[\namiKKAuto{\int_{a}^{b} f(x) \, dx}\]
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  横書き：
+
+  \underLineKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+  \underLineKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+  \namiKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+  \namiKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+  \[\underLineKK{\int_{a}^{b} f(x) \, dx}\]
+  \[\underLineKKAuto{\int_{a}^{b} f(x) \, dx}\]
+  \[\namiKK{\int_{a}^{b} f(x) \, dx}\]
+  \[\namiKKAuto{\int_{a}^{b} f(x) \, dx}\]
+
+  縦書き：
+
+  \parbox<t>[c][9cm][c]{6cm}{%
+    \underLineKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+    \underLineKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+    \namiKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+    \namiKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
+
+    \[\underLineKK{\int_{a}^{b} f(x) \, dx}\]
+    \[\underLineKKAuto{\int_{a}^{b} f(x) \, dx}\]
+    \[\namiKK{\int_{a}^{b} f(x) \, dx}\]
+    \[\namiKKAuto{\int_{a}^{b} f(x) \, dx}\]
+  }
+
+\end{OutPut}
+
+\noindent 以上の比較を参照すると一目瞭然でしょう。
+
+使い分けについてですが、基本的にはManual Seriesを使用してください。なぜならAuto Seriesは、引数の中に一箇所でも極端に深さをとるコマンドが存在した場合、改行後もずっとその調整のまま線を引き続けてしまいます。したがって、パラグラフの大部分にアンダーラインを入れたいというような場合には不向きです。（Regarding the choice of which series to use, please use the Manual Series by default.
+This is because the Auto Series continues to draw lines with the same vertical adjustment if there is even a single command within its argument that takes an unusually deep depth.
+Therefore, it is not suitable for cases where you want to underline a large portion of a paragraph.）
+
+例えば、（For example, ）
+
+\begin{SourceCode}{TeX}
+  以上より、
+  \[f(x)=\namiKKAuto{\frac{x+\frac{a}{b}}{x^4+\frac{c}{d}}} \ \text{……\kakko{答}}\]
+  \noindent となります。
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  以上より、
+  \[f(x)=\namiKKAuto{\frac{x+\frac{a}{b}}{x^4+\frac{c}{d}}} \ \text{……\kakko{答}}\]
+  \noindent となります。
+\end{OutPut}
+
+\noindent 以上のような局面においては、数式に下線が被ると格好が悪いため、Auto Seriesの使い所であると言えます。（in such situations, it would look awkward if the underline overlapped with mathematical expressions, so this is where the Auto Series becomes useful.）
+
 \section{ライセンス（License）}
 Released under the LaTeX Project Public License (LPPL) 1.3c.
 
 \section{Version History}
 \begin{itemize}
   \item \textbf{v1.0.1 (2025/10/26)} --- Initial public release.
+  \item \textbf{v1.1.0 (2025/10/29)} --- I added Auto Series, and changed some csname of commands.
 \end{itemize}
 
 \section{Source Code}
