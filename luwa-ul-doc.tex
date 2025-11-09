@@ -512,7 +512,6 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \settoheight{\temp@depth@kk}{#1}%
       \addtolength{\temp@depth@kk}{-.5em}%
       \setlength{\temp@depth@kk}{-\temp@depth@kk}%
-      \addtolength{\temp@depth@kk}{-.03\zw}% 2025/11/10加筆修正
     \else%
       \settodepth{\temp@depth@kk}{#1}%
       \addtolength{\temp@depth@kk}{-.12\zw}% 2025/11/10加筆修正
@@ -687,6 +686,12 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 
 
   %lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）%%%%%%%%%%%%%%%%%%%%%
+
+  % 2025/11/10加筆修正
+  \newlength{\sladj@tenKK@dashKK}
+  \sladj@tenKK@dashKK =.07\zw
+
+
   \newlength{\stength@radius}
   \newlength{\stength@distance}
   \newlength{\stength@bottom}
@@ -713,8 +718,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
     \xleaders\hbox{%
     \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
-      \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
-      \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);%.8
+      \fill[mygray@luwa-ul,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
+      \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
     \end{tikzpicture}%
     }%
     }%
@@ -759,8 +764,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \xleaders\hbox{%
     \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
       \begin{scope}[yshift=-\temp@depth@kk]
-        \fill[mygray@luwa-ul,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
-        \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);%.8
+        \fill[mygray@luwa-ul,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
+        \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
       \end{scope}
     \end{tikzpicture}%
     }%
@@ -812,8 +817,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
       \xleaders\hbox{%
         \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
-          \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
-          \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+          \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
+          \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{tikzpicture}%
       }%
     }%
@@ -848,8 +853,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \xleaders\hbox{%
         \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
           \begin{scope}[yshift=-\temp@depth@kk]
-            \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
-            \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
+            \draw[black,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
+            \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
           \end{scope}
         \end{tikzpicture}%
       }%
