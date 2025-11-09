@@ -88,7 +88,7 @@
 
 \title{\texttt{luwa-ul} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.1.0 (2025/10/29)}
+\date{Version 1.1.1 (2025/11/10)}
 
 \begin{document}
 \begin{titlepage}
@@ -444,12 +444,13 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 \begin{itemize}
   \item \textbf{v1.0.1 (2025/10/26)} --- Initial public release.
   \item \textbf{v1.1.0 (2025/10/29)} --- I added Auto Series, and changed some csname of commands.
+  \item \textbf{v1.1.1 (2025/11/10)} --- Slightly adjusted the move of Auto Series.
 \end{itemize}
 
 \section{Source Code}
 \begin{lstlisting}
   \NeedsTeXFormat{LaTeX2e}
-  \ProvidesPackage{luwa-ul}[2025/10/29, Version 1.1.0]
+  \ProvidesPackage{luwa-ul}[2025/11/10, Version 1.1.1]
 
   \RequirePackage{luacolor, lua-ul, calc, tikz}
   \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
@@ -511,8 +512,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \settoheight{\temp@depth@kk}{#1}%
       \addtolength{\temp@depth@kk}{-.5em}%
       \setlength{\temp@depth@kk}{-\temp@depth@kk}%
+      \addtolength{\temp@depth@kk}{-.03\zw}% 2025/11/10加筆修正
     \else%
       \settodepth{\temp@depth@kk}{#1}%
+      \addtolength{\temp@depth@kk}{-.12\zw}% 2025/11/10加筆修正
     \fi%
   }
   \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
