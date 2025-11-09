@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/10/29, Version 1.1.0]
+\ProvidesPackage{luwa-ul}[2025/10/29, Version 1.1.1]
 
 \RequirePackage{luacolor, lua-ul, calc, tikz}
 \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
@@ -61,8 +61,10 @@
     \settoheight{\temp@depth@kk}{#1}%
     \addtolength{\temp@depth@kk}{-.5em}%
     \setlength{\temp@depth@kk}{-\temp@depth@kk}%
+    \addtolength{\temp@depth@kk}{-.03\zw}% 2025/11/10加筆修正
   \else%
     \settodepth{\temp@depth@kk}{#1}%
+    \addtolength{\temp@depth@kk}{-.12\zw}% 2025/11/10加筆修正
   \fi%
 }
 \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
