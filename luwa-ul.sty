@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/11/10, Version 1.1.1]
+\ProvidesPackage{luwa-ul}[2025/11/10, Version 1.1.1 -- undev]
 
 \RequirePackage{luacolor, lua-ul, calc, tikz}
 \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
@@ -40,17 +40,17 @@
   \def\KKUL@color{#1}%
 }
 
-% ルビが中に入っているときだけテキストを上昇させる
-\newlength{\KKUL@rubyraise}
-\directlua{
-  function RubyFlagKKUL(t)
-    if string.find(t, "\\ruby") or string.find(t, "\\kenten") or string.find(t, "\\送り") or string.find(t, "\\振り") then
-      tex.print("1")
-    else
-      tex.print("0")
-    end
-  end
-}
+% ルビが中に入っているときだけテキストを上昇させる（廃止）
+% \newlength{\KKUL@rubyraise}
+% \directlua{
+%   function RubyFlagKKUL(t)
+%     if string.find(t, "\\ruby") or string.find(t, "\\kenten") or string.find(t, "\\送り") or string.find(t, "\\振り") then
+%       tex.print("1")
+%     else
+%       tex.print("0")
+%     end
+%   end
+% }
 
 
 % 追記（2025/10/29）
@@ -86,17 +86,19 @@
   \def\KKUL@color{black}%
   \def\underLineKK@test@contents{#2}%
   \setkeys{KKUL}{#1}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\underLineKK@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3%
-    \ifnum\UL@rubyflag=1%
-      \setlength{\KKUL@rubyraise}{.5em}%
-    \else%
-      \setlength{\KKUL@rubyraise}{0em}%
-    \fi%
-  \else%
-    \setlength{\KKUL@rubyraise}{0em}%
-  \fi%
-  \underLine[bottom=\KKUL@bottom+\KKUL@rubyraise, height=\KKUL@height, color=\KKUL@color]{#2}%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\underLineKK@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3%
+  %   \ifnum\UL@rubyflag=1%
+  %     \setlength{\KKUL@rubyraise}{.5em}%
+  %   \else%
+  %     \setlength{\KKUL@rubyraise}{0em}%
+  %   \fi%
+  % \else%
+  %   \setlength{\KKUL@rubyraise}{0em}%
+  % \fi%
+  \underLine[bottom=\KKUL@bottom
+  % +\KKUL@rubyraise
+  , height=\KKUL@height, color=\KKUL@color]{#2}%
 }
 
 
@@ -141,12 +143,12 @@
   \setlength{\snamift@bottom}{0ex}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3%
-    \ifnum\UL@rubyflag=1%
-      \addtolength{\snamift@bottom}{.5em}%
-    \fi%
-  \fi%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\snamift@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3%
+  %   \ifnum\UL@rubyflag=1%
+  %     \addtolength{\snamift@bottom}{.5em}%
+  %   \fi%
+  % \fi%
   % ２：IDを進める
   \global\advance\snamift@id by 1\relax%
   % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
@@ -257,12 +259,12 @@
   \setlength{\stength@bottom}{0ex}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\stength@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3
-    \ifnum\UL@rubyflag=1
-      \addtolength{\stength@bottom}{.5em}%
-    \fi
-  \fi%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\stength@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \addtolength{\stength@bottom}{.5em}%
+  %   \fi
+  % \fi%
   \global\advance\stength@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
   \xleaders\hbox{%
@@ -356,12 +358,12 @@
   \setlength{\underdash@bottom}{0ex}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\sdashgth@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3
-    \ifnum\UL@rubyflag=1
-      \addtolength{\underdash@bottom}{.5em}%
-    \fi
-  \fi%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\sdashgth@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \addtolength{\underdash@bottom}{.5em}%
+  %   \fi
+  % \fi%
   \global\advance\underdash@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
     \xleaders\hbox{%
@@ -450,20 +452,20 @@
   \def\overLineKK@color{black}%
   \def\overLineKK@test@contents{#2}%
   \setkeys{overLine}{#1}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\overLineKK@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3%
-    \ifnum\UL@rubyflag=1%
-      \addtolength{\overLineKK@KK@Adjust}{.6em}%
-    \else%
-      \addtolength{\overLineKK@KK@Adjust}{.1em}%
-    \fi%
-  \else%
-    \ifnum\UL@rubyflag=1%
-      \addtolength{\overLineKK@KK@Adjust}{.6em}%
-    \else%
-      \addtolength{\overLineKK@KK@Adjust}{.1em}%
-    \fi%
-  \fi%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\overLineKK@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3%
+  %   \ifnum\UL@rubyflag=1%
+  %     \addtolength{\overLineKK@KK@Adjust}{.6em}%
+  %   \else%
+  %     \addtolength{\overLineKK@KK@Adjust}{.1em}%
+  %   \fi%
+  % \else%
+  %   \ifnum\UL@rubyflag=1%
+  %     \addtolength{\overLineKK@KK@Adjust}{.6em}%
+  %   \else%
+  %     \addtolength{\overLineKK@KK@Adjust}{.1em}%
+  %   \fi%
+  % \fi%
   \underLineKK[bottom=\overLineKK@KK@Adjust,color=\overLineKK@color]{#2}%
   }
 
@@ -498,8 +500,8 @@
 
 %グレーの蛍光ペン（細くて下の方だけ塗るやつ）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newlength{\thinHighLight@KK@Adjust}
-\newlength{\thinHighLight@KK@Adjust@ruby}
-\newlength{\thinHighLight@KK@Adjust@ruby@yoko}
+% \newlength{\thinHighLight@KK@Adjust@ruby}
+% \newlength{\thinHighLight@KK@Adjust@ruby@yoko}
 \newcommand{\thinHighLight@KK@Adjust@tmp}{%
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\thinHighLight@KK@Adjust}{-.3\zw}%
@@ -510,21 +512,41 @@
 \DeclareDocumentCommand{\thinHighLight}{ O{color=gray} +m }{%
   \thinHighLight@KK@Adjust@tmp%
   \def\thinHighLight@test@contents{#2}%
-  \setlength{\thinHighLight@KK@Adjust@ruby}{0em}%
-  \setlength{\thinHighLight@KK@Adjust@ruby@yoko}{0em}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thinHighLight@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3
-    \ifnum\UL@rubyflag=1
-      \setlength{\thinHighLight@KK@Adjust@ruby}{-.5em}%
-    \fi
-  \fi
-  \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp-\thinHighLight@KK@Adjust@ruby,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust+\thinHighLight@KK@Adjust@ruby]{#2}%
+  % \setlength{\thinHighLight@KK@Adjust@ruby}{0em}%
+  % \setlength{\thinHighLight@KK@Adjust@ruby@yoko}{0em}%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thinHighLight@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thinHighLight@KK@Adjust@ruby}{-.5em}%
+  %   \fi
+  % \fi
+  \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp
+  % -\thinHighLight@KK@Adjust@ruby
+  ,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust+
+  % \thinHighLight@KK@Adjust@ruby
+  ]{#2}%
+}
+
+\DeclareDocumentCommand{\thinHighLightAuto}{ O{color=gray} +m }{%
+  \thinHighLight@KK@Adjust@tmp%
+  \def\thinHighLight@test@contents{#2}%
+  % \setlength{\thinHighLight@KK@Adjust@ruby}{0em}%
+  % \setlength{\thinHighLight@KK@Adjust@ruby@yoko}{0em}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \getdepth@kk{\thinHighLight@test@contents}%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thinHighLight@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thinHighLight@KK@Adjust@ruby}{-.5em}%
+  %   \fi
+  % \fi
+  \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust-\temp@depth@kk]{#2}%
 }
 
 
 \newlength{\thickHighLight@KK@Adjust}
-\newlength{\thickHighLight@KK@Adjust@ruby}
-\newlength{\thickHighLight@KK@Adjust@ruby@yoko}
+% \newlength{\thickHighLight@KK@Adjust@ruby}
+% \newlength{\thickHighLight@KK@Adjust@ruby@yoko}
 \newcommand{\thickHighLight@KK@Adjust@tmp}{%
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\thickHighLight@KK@Adjust}{-1.1\zw}%
@@ -535,20 +557,72 @@
 \DeclareDocumentCommand{\thickHighLight}{ O{color=gray} +m }{%
   \thickHighLight@KK@Adjust@tmp%
   \def\thickHighLight@test@contents{#2}%
-  \setlength{\thickHighLight@KK@Adjust@ruby}{0em}%
-  \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{0em}%
-  \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thickHighLight@test@contents}}")}\relax}%
-  \ifnum\ltjgetparameter{direction}=3
-    \ifnum\UL@rubyflag=1
-      \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
-    \fi
-  \else
-    \ifnum\UL@rubyflag=1
-      \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
-      \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{.5em}%
-    \fi
-  \fi
-  \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\thickHighLight@KK@Adjust@ruby,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust+\thickHighLight@KK@Adjust@ruby+\thickHighLight@KK@Adjust@ruby@yoko]{#2}%
+  % \setlength{\thickHighLight@KK@Adjust@ruby}{0em}%
+  % \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{0em}%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thickHighLight@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+  %   \fi
+  % \else
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+  %     \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{.5em}%
+  %   \fi
+  % \fi
+  \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp
+  % -\thickHighLight@KK@Adjust@ruby
+  ,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust
+  % +\thickHighLight@KK@Adjust@ruby+\thickHighLight@KK@Adjust@ruby@yoko
+  ]{#2}%
+}
+
+% Auto Depth Adjust System 
+\newlength{\temp@height@kk@thickHighLight}
+\NewDocumentCommand{\getheight@kk@thickHighLight}{m}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \settodepth{\temp@height@kk@thickHighLight}{#1}%
+    \addtolength{\temp@height@kk@thickHighLight}{-.5\zw}%
+  \else%
+    \settoheight{\temp@height@kk@thickHighLight}{#1}%
+    \addtolength{\temp@height@kk@thickHighLight}{-.9\zw}%
+  \fi%
+}
+\DeclareDocumentCommand{\thickHighLightAuto}{ O{color=gray} +m }{%
+  \thickHighLight@KK@Adjust@tmp%
+  \def\thickHighLight@test@contents{#2}%
+  \setlength{\temp@depth@kk}{0pt}%
+  \setlength{\temp@height@kk@thickHighLight}{0pt}%
+  \getdepth@kk{\thickHighLight@test@contents}%
+  \getheight@kk@thickHighLight{\thickHighLight@test@contents}%
+  % \setlength{\thickHighLight@KK@Adjust@ruby}{0em}%
+  % \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{0em}%
+  % \edef\UL@rubyflag{\numexpr\directlua{RubyFlagKKUL("\luaescapestring{\unexpanded\expandafter{\thickHighLight@test@contents}}")}\relax}%
+  % \ifnum\ltjgetparameter{direction}=3
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+  %   \fi
+  % \else
+  %   \ifnum\UL@rubyflag=1
+  %     \setlength{\thickHighLight@KK@Adjust@ruby}{-.5em}%
+  %     \setlength{\thickHighLight@KK@Adjust@ruby@yoko}{.5em}%
+  %   \fi
+  % \fi
+  \ifnum\ltjgetparameter{direction}=3%
+    \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\temp@depth@kk
+    +\temp@height@kk@thickHighLight
+    % -\thickHighLight@KK@Adjust@ruby
+    ,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust
+    -\temp@height@kk@thickHighLight
+    % +\thickHighLight@KK@Adjust@ruby+\thickHighLight@KK@Adjust@ruby@yoko
+    ]{#2}%
+  \else%
+    \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp+\temp@height@kk@thickHighLight+\temp@depth@kk
+    % -\thickHighLight@KK@Adjust@ruby
+    ,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@depth@kk
+    % +\thickHighLight@KK@Adjust@ruby+\thickHighLight@KK@Adjust@ruby@yoko
+    ]{#2}%
+  \fi%
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
