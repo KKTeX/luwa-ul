@@ -1,3 +1,6 @@
+% まだ修正終わってない
+
+
 \documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
 \usepackage{luwa-ul}
 \usepackage{hyperref}
@@ -132,6 +135,7 @@
 \begin{itemize}
   \item \verb|\underLineKKAuto|, \verb|\overLineKKAuto|
   \item \verb|\nijyusenAuto|
+  \item \verb|\thinHighLightAuto|, \verb|\thickHighLightAuto|
   \item \verb|\tenKKAuto|, \verb|\dashKKAuto|, \verb|\namiKKAuto|
 \end{itemize}
 
@@ -161,7 +165,7 @@
   \underLineKK[bottom=.1em]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \underLineKK{ああ\ruby{あ}{あ}あああああ}
+    \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
   }
 \end{SourceCode}
 
@@ -174,7 +178,7 @@
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \underLineKK{ああ\ruby{あ}{あ}あああああ}
+    \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
     \underLineKK{ああああああ}
   }
 \end{OutPut}
@@ -196,6 +200,7 @@
   横書き：
 
   \overLineKK[color=red]{あああああああああ}
+  \overLineKKAuto{ああ\ruby{あ}{あ}あああああ}
 
   縦書き：
 
@@ -226,12 +231,12 @@
   横書き：
 
   \nijyusen[color=red]{あああああああああ}
-  \keshinijyusen{ああああああああ}
+  \keshinijyusen{あああああ\ruby{あああ}あああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \nijyusen[color=red]{ああ\ruby{あ}{あ}あああああ}
+    \nijyusenAuto[color=red]{ああ\ruby{あ}{あ}あああああ}
     \keshinijyusen{ああ\ruby{あ}{あ}あああああ}
     \nijyusen[color=red]{あああああああ}
     \keshinijyusen{あああああああ}
@@ -249,26 +254,35 @@
   \thickHighLight[color=green]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \thinHighLight{あああ\ruby{あ}{あ}ああああ}
-    \thickHighLight[color=green]{ああ\ruby{あ}{あ}あああああ}
+    \thinHighLightAuto{あああ\ruby{あ}{あ}ああああ}
+    \thickHighLightAuto[color=green]{ああ\ruby{あ}{あ}あああああ}
     \thinHighLight{あああああああああ}
     \thickHighLight[color=green]{あああああああああ}
+    \thickHighLightAuto{ああ$\displaystyle\int_{b}^{a}x^2\, dx$あああああ}
+    \thinHighLightAuto{ああ$\displaystyle\int_{b}^{a}x^2\, dx$あああああ}
   }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
   横書き：
 
+  \thinHighLightAuto{あああ\ruby{あ}{あ}ああああ}
+  \thickHighLightAuto[color=green]{ああ\ruby{あ}{あ}あああああ}
   \thinHighLight{あああああああああ}
   \thickHighLight[color=green]{あああああああああ}
+  \thinHighLightAuto{あああ\ruby{あ}{あ}ああああ}
+  \thickHighLightAuto{ああ$\displaystyle\int_{b}^{a}x^2\, dx$あああああ}
+  \thinHighLightAuto{ああ$\displaystyle\int_{b}^{a}x^2\, dx$あああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \thinHighLight{あああ\ruby{あ}{あ}ああああ}
-    \thickHighLight[color=green]{ああ\ruby{あ}{あ}あああああ}
+    \thinHighLightAuto{あああ\ruby{あ}{あ}ああああ}
+    \thickHighLightAuto[color=green]{ああ\ruby{あ}{あ}あああああ}
     \thinHighLight{あああああああああ}
     \thickHighLight[color=green]{あああああああああ}
+    \thickHighLightAuto{ああ$\int_{b}^{a}x^2\, dx$あああああ}
+    \thinHighLightAuto{ああ$\int_{b}^{a}x^2\, dx$あああああ}
   }
 \end{OutPut}
 
@@ -278,11 +292,11 @@
 \begin{SourceCode}{TeX}
   \namiKK[bottom=下線最下部の位置のずれ]{引数}
 
-  \namiKK[bottom=.3em]{あああああああああ}
+  \namiKK[bottom=.5em]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \namiKK{あああ\ruby{あ}{あ}ああああ}
-    \namiKK[bottom=.3em]{あああああああああ}
+    \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
+    \namiKK[bottom=.5em]{あああああああああ}
   }
 \end{SourceCode}
 
@@ -290,13 +304,13 @@
   横書き：
 
   \namiKK{あああああああああ}
-  \namiKK[bottom=.3em]{あああああああああ}
+  \namiKK[bottom=.5em]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \namiKK{あああ\ruby{あ}{あ}ああああ}
-    \namiKK[bottom=.3em]{あああああああああ}
+    \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
+    \namiKK[bottom=.5em]{あああああああああ}
   }
 \end{OutPut}
 
@@ -316,9 +330,9 @@
   \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \tenKK{あああああ\ruby{あ}{あ}ああ}
+    \tenKKAuto{あああああ\ruby{あ}{あ}ああ}
     \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
-    \dashKK{あああああ\ruby{あ}{あ}ああ}
+    \dashKKAuto{あああああ\ruby{あ}{あ}ああ}
     \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
   }
 \end{SourceCode}
@@ -334,9 +348,9 @@
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \tenKK{あああああ\ruby{あ}{あ}ああ}
+    \tenKKAuto{あああああ\ruby{あ}{あ}ああ}
     \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
-    \dashKK{あああああ\ruby{あ}{あ}ああ}
+    \dashKKAuto{あああああ\ruby{あ}{あ}ああ}
     \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
   }
 \end{OutPut}
