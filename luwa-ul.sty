@@ -48,7 +48,7 @@
 \NewDocumentCommand{\getdepth@kk}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
     \settoheight{\temp@depth@kk}{#1}%
-    \addtolength{\temp@depth@kk}{-.5em}%
+    \addtolength{\temp@depth@kk}{-.5\zw}%
     \setlength{\temp@depth@kk}{-\temp@depth@kk}%
   \else%
     \settodepth{\temp@depth@kk}{#1}%
@@ -72,6 +72,9 @@
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
   \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\KKUL@bottom}{-.1\zw}%
+  \fi%
   \def\KKUL@color{black}%
   \def\underLineKK@test@contents{#2}%
   \setkeys{KKUL}{#1}%
@@ -86,6 +89,9 @@
   \setlength{\temp@depth@kk}{0pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
   \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\KKUL@bottom}{-.1\zw}%
+  \fi%
   \def\KKUL@color{black}%
   \def\underLineKK@test@contents{#2}%
   \setkeys{KKUL}{#1}%
@@ -124,6 +130,9 @@
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\snamift@bottom}{-.1\zw}%
+  \fi%
   % ２：IDを進める
   \global\advance\snamift@id by 1\relax%
   % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
@@ -164,6 +173,9 @@
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\snamift@bottom}{-.1\zw}%
+  \fi%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\snamift@test@contents}%
   \global\advance\snamift@id by 1\relax%
@@ -234,6 +246,9 @@
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\stength@bottom}{-.1\zw}%
+  \fi%
   \global\advance\stength@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
   \xleaders\hbox{%
@@ -278,6 +293,9 @@
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\stength@bottom}{-.1\zw}%
+  \fi%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\stength@test@contents}%
   \global\advance\stength@id by 1\relax%
@@ -330,6 +348,9 @@
   \def\underdashgth@color{black}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\underdash@bottom}{-.1\zw}%
+  \fi%
   \global\advance\underdash@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
     \xleaders\hbox{%
@@ -364,6 +385,9 @@
   \def\underdashgth@color{black}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
+  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \addtolength{\underdash@bottom}{-.1\zw}%
+  \fi%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\sdashgth@test@contents}%
   \global\advance\underdash@id by 1\relax%
