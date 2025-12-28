@@ -496,7 +496,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
   \item \textbf{v1.1.0 (2025/10/29)} --- I added Auto Series, and changed some csname of commands.
   \item \textbf{v1.1.1 (2025/11/10)} --- Slightly adjusted the move of Auto Series.
   \item \textbf{v1.2.0 (2025/11/25)} --- Get rid of specific adjustment when \verb|\ruby| is used in Manual Series and Auto Series takes over the role. Also, slightly changed internal length adjusting parameter.
-  \item \textbf{v1.2.1 (2025/12/28)} --- Fixed a problem cased by using ex scale.
+  \item \textbf{v1.2.1 (2025/12/28)} --- Fixed a problem cased by using ex scale. Also, \verb|\LineNumbering| was slightly improved.
 \end{itemize}
 
 \section{Source Code}
@@ -504,7 +504,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
   \NeedsTeXFormat{LaTeX2e}
   \ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
 
-
+  \RequirePackage{luatexja-adjust}
   \RequirePackage{luacolor, lua-ul, calc, tikz}
   \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
   \definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
@@ -545,7 +545,6 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
   }
 
 
-  % 追記（2025/10/29）
   % Auto Depth Adjust System 
   \newlength{\temp@depth@kk}
   \NewDocumentCommand{\getdepth@kk}{m}{%
@@ -612,10 +611,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
     \fi
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）
   \newlength{\snamift@bottom}\setlength{\snamift@bottom}{0pt}
   \define@key{snamift}{bottom}{%
     \setlength{\snamift@bottom}{#1}%
@@ -723,11 +722,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
     \fi
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）%%%%%%%%%%%%%%%%%%%%%
-  % 2025/11/10加筆修正
+  % lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）
   \newlength{\sladj@tenKK@dashKK}
   \sladj@tenKK@dashKK =.07\zw
 
@@ -931,10 +929,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
     \fi
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %overLine%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % overLine
   \define@key{overLine}{color}{%
     \def\overLineKK@color{#1}%
   }
@@ -970,10 +968,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \setkeys{overLine}{#1}%
     \underLineKK@plain[bottom=\overLineKK@KK@Adjust-\temp@depth@kk@over,color=\overLineKK@color]{#2}%
     }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %グレーの蛍光ペン（細くて下の方だけ塗るやつ）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % グレーの蛍光ペン（細くて下の方だけ塗るやつ）
   \newlength{\thinHighLight@KK@Adjust}
   \newcommand{\thinHighLight@KK@Adjust@tmp}{%
     \ifnum\ltjgetparameter{direction}=3%
@@ -1035,10 +1033,10 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp+\temp@height@kk@thickHighLight+\temp@depth@kk,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@depth@kk]{#2}%
     \fi%
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %二重線%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % 二重線
   \newlength{\nijyusen@bottom}
   \newlength{\nijyusen@bottom@adjust}
 
@@ -1100,26 +1098,28 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \keshinijyuusen@KK@Adjust@tmp%
     \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
 
-  %下線の前に番号を振る%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % 下線の前に番号を振る
   \newcommand{\linenumbering@luwa}[1]{\raisebox{-.43\zw}{\scalebox{.6}{#1}}}
 
   \newdimen\overtline@f@size
   \NewDocumentCommand{\tlinenumbering@luwa}{s m}{%
     \setlength{\overtline@f@size}{\f@size pt}%
-    \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
-  }}\hskip.0646\zw}
+    \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}\nolinebreak}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
+  \nolinebreak}}\hskip.0645\zw}
 
   \NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{% 縦横両対応
     \ifnum\ltjgetparameter{direction}=3%
-      \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering@luwa*{#2}}}{\raisebox{#3}{\tlinenumbering@luwa{#2}}}%
+      \ltjghostbeforejachar%
+      \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering@luwa*{#2}}\nolinebreak}{\raisebox{#3}{\tlinenumbering@luwa{#2}}\nolinebreak}%
     \else
-      \raisebox{#3}{\linenumbering@luwa{#2}}%
+      \ltjghostbeforejachar%
+      \raisebox{#3}{\linenumbering@luwa{#2}\nolinebreak}%
     \fi
   }
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
 
   \endinput
 \end{lstlisting}
