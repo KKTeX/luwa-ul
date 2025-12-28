@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/11/25, Version 1.2.0]
+\ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
 
 
 \RequirePackage{luacolor, lua-ul, calc, tikz}
@@ -56,7 +56,7 @@
   \fi%
 }
 \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
-  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@bottom{-.1\zw}%
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
   \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
@@ -68,7 +68,7 @@
 
 % 許容する（見出しなどで見た目を損なわないためなど）
 \NewDocumentCommand{\underLineKK}{ O{} +m }{%
-  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@bottom{-.1\zw}%
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
   \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
@@ -84,7 +84,7 @@
 
 % 深さに応じて変わるタイプ
 \NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
-  \underLine@KK@Adjust@bottom{-.1em}%
+  \underLine@KK@Adjust@bottom{-.1\zw}%
   \underLine@KK@Adjust@height{0.3pt}%
   \setlength{\temp@depth@kk}{0pt}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
@@ -113,7 +113,7 @@
 
 
 %lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newlength{\snamift@bottom}\setlength{\snamift@bottom}{0ex}
+\newlength{\snamift@bottom}\setlength{\snamift@bottom}{0pt}
 \define@key{snamift}{bottom}{%
   \setlength{\snamift@bottom}{#1}%
 }
@@ -126,7 +126,7 @@
 
 \NewDocumentCommand{\namiKK}{ O{} +m }{%
   % １：キーを先にセットして \snamift@bottom を更新
-  \setlength{\snamift@bottom}{0ex}%
+  \setlength{\snamift@bottom}{0pt}%
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
@@ -169,7 +169,7 @@
 }
 
 \NewDocumentCommand{\namiKKAuto@make}{ O{} +m }{%
-  \setlength{\snamift@bottom}{0ex}%
+  \setlength{\snamift@bottom}{0pt}%
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
@@ -242,7 +242,7 @@
 \NewDocumentCommand{\tenKK}{ O{} +m }{%
   \setlength{\stength@radius}{.1ex}%
   \setlength{\stength@distance}{.4ex}%
-  \setlength{\stength@bottom}{0ex}%
+  \setlength{\stength@bottom}{0pt}%
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
@@ -252,7 +252,7 @@
   \global\advance\stength@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
   \xleaders\hbox{%
-  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+  \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
     \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
     \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
   \end{tikzpicture}%
@@ -260,7 +260,7 @@
   }%
   \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
   \xleaders\hbox{%
-  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+  \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
     \begin{scope}[yshift=\f@size/1.1 pt]
     \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
     \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
@@ -289,7 +289,7 @@
 \NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
   \setlength{\stength@radius}{.1ex}%
   \setlength{\stength@distance}{.4ex}%
-  \setlength{\stength@bottom}{0ex}%
+  \setlength{\stength@bottom}{0pt}%
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
@@ -301,7 +301,7 @@
   \global\advance\stength@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
   \xleaders\hbox{%
-  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+  \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
     \begin{scope}[yshift=-\temp@depth@kk]
       \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
       \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
@@ -311,7 +311,7 @@
   }%
   \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
   \xleaders\hbox{%
-  \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+  \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
     \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]
     \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
     \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
@@ -344,7 +344,7 @@
   \setlength{\underdash@length}{.4ex}%
   \setlength{\underdash@distance}{.3ex}%
   \setlength{\underdash@width}{.2pt}%
-  \setlength{\underdash@bottom}{0ex}%
+  \setlength{\underdash@bottom}{0pt}%
   \def\underdashgth@color{black}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
@@ -354,17 +354,17 @@
   \global\advance\underdash@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
     \xleaders\hbox{%
-      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
-        \draw[\underdashgth@color,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
+      \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
+        \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
         \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
       \end{tikzpicture}%
     }%
   }%
   \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
     \xleaders\hbox{%
-      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+      \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
         \begin{scope}[yshift=\f@size/1.1 pt]%
-          \draw[\underdashgth@color,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+          \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{scope}%
       \end{tikzpicture}%
@@ -393,9 +393,9 @@
   \global\advance\underdash@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
     \xleaders\hbox{%
-      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+      \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
         \begin{scope}[yshift=-\temp@depth@kk]
-          \draw[\underdashgth@color,line width=\underdash@width,xshift=.25ex,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
+          \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{scope}
       \end{tikzpicture}%
@@ -403,9 +403,9 @@
   }%
   \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
     \xleaders\hbox{%
-      \begin{tikzpicture}[x=0.8ex,y=.2ex,baseline=.7ex]%
+      \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
         \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]%
-          \draw[\underdashgth@color,line width=\underdash@width,xshift=.1ex,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+          \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{scope}%
       \end{tikzpicture}%
@@ -443,7 +443,7 @@
   \def\overLineKK@color{black}%
   \def\overLineKK@test@contents{#2}%
   \setkeys{overLine}{#1}%
-  \underLineKK[bottom=\overLineKK@KK@Adjust-.05em,color=\overLineKK@color]{#2}%
+  \underLineKK[bottom=\overLineKK@KK@Adjust-.05\zw,color=\overLineKK@color]{#2}%
   }
 
 
@@ -451,10 +451,10 @@
 \NewDocumentCommand{\getdepth@kk@over}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
     \settodepth{\temp@depth@kk@over}{#1}%
-    \addtolength{\temp@depth@kk@over}{-.45em}%
+    \addtolength{\temp@depth@kk@over}{-.45\zw}%
   \else%
     \settoheight{\temp@depth@kk@over}{#1}%
-    \addtolength{\temp@depth@kk@over}{-.8em}%
+    \addtolength{\temp@depth@kk@over}{-.8\zw}%
     \setlength{\temp@depth@kk@over}{-\temp@depth@kk@over}%
   \fi%
 }
@@ -476,7 +476,7 @@
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\thinHighLight@KK@Adjust}{-.3\zw}%
   \else%
-    \setlength{\thinHighLight@KK@Adjust}{0ex}%
+    \setlength{\thinHighLight@KK@Adjust}{0pt}%
   \fi
 }
 \DeclareDocumentCommand{\thinHighLight}{ O{color=gray} +m }{%
@@ -499,7 +499,7 @@
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\thickHighLight@KK@Adjust}{-1.1\zw}%
   \else%
-    \setlength{\thickHighLight@KK@Adjust}{0ex}%
+    \setlength{\thickHighLight@KK@Adjust}{0pt}%
   \fi
 }
 \DeclareDocumentCommand{\thickHighLight}{ O{color=gray} +m }{%
@@ -544,7 +544,7 @@
 
 \NewDocumentCommand\nijyusen{ O{} +m }{%
   \def\nijyusen@KK@color{black}%
-  \setlength{\nijyusen@bottom}{0ex}%
+  \setlength{\nijyusen@bottom}{0pt}%
   \setkeys{nijyusen}{#1}%
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
@@ -559,7 +559,7 @@
   \def\nijyusen@test@contents{#2}%
   \setlength{\temp@depth@kk}{0pt}%
   \getdepth@kk{\nijyusen@test@contents}%
-  \setlength{\nijyusen@bottom}{0ex}%
+  \setlength{\nijyusen@bottom}{0pt}%
   \setkeys{nijyusen}{#1}%
   \ifnum\ltjgetparameter{direction}=3%
     \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
@@ -584,9 +584,9 @@
 \newlength{\keshinijyuusen@KK@Adjust}
 \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
   \ifnum\ltjgetparameter{direction}=3%
-    \setlength{\keshinijyuusen@KK@Adjust}{0ex}%
+    \setlength{\keshinijyuusen@KK@Adjust}{0pt}%
   \else%
-    \setlength{\keshinijyuusen@KK@Adjust}{.15ex}%
+    \setlength{\keshinijyuusen@KK@Adjust}{.0646\zw}%
   \fi
 }
 \define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
@@ -601,15 +601,15 @@
 
 
 %下線の前に番号を振る%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\linenumbering@luwa}[1]{\raisebox{-1ex}{\scalebox{.6}{#1}}}
+\newcommand{\linenumbering@luwa}[1]{\raisebox{-.43\zw}{\scalebox{.6}{#1}}}
 
 \newdimen\overtline@f@size
 \NewDocumentCommand{\tlinenumbering@luwa}{s m}{%
   \setlength{\overtline@f@size}{\f@size pt}%
   \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
-}}\hskip.15ex}
+}}\hskip.0646\zw}
 
-\NewDocumentCommand{\LineNumbering}{ s m O{0ex} }{% 縦横両対応
+\NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{% 縦横両対応
   \ifnum\ltjgetparameter{direction}=3%
     \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering@luwa*{#2}}}{\raisebox{#3}{\tlinenumbering@luwa{#2}}}%
   \else
