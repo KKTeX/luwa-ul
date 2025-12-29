@@ -143,7 +143,7 @@
 
 \begin{itemize}
   \item 縦書き時のずれの解消
-  \item ルビがあった際の挙動の変化
+  \item ルビがあった際など、高さや深さが通常の文字と変わる場合に対する挙動の変化
 \end{itemize}
 
 \noindent の２点において調整を施したものとなっています。
@@ -151,7 +151,7 @@
 （This command is basically made out of \verb|\underLine| command, which is provided by \texttt{lua-ul} package. I added some adjustments on it in order to 
 \begin{itemize}
   \item eliminate the misalignment in vertical writing mode.
-  \item change its behavior when the argument includes phonetic guides.
+  \item change its behavior when the argument includes taller or deeper than normal characters.
 \end{itemize}
 ）
 
@@ -159,7 +159,8 @@
 
 \begin{SourceCode}{TeX}
   % 構文
-  \underLineKK[color=色, bottom=下線最下部の位置のずれ, heigth=下線の太さ（bottomの位置からの距離で計算）]{引数}
+  \underLineKK[color=<色>, bottom=<下線最下部の位置のずれ>,
+  heigth=<下線の太さ（bottomの位置からの距離で計算）>]{<テキスト>}
 
   % 使用例
   \underLineKK[color=red]{あああああああああ}
@@ -194,7 +195,7 @@
 
 \begin{SourceCode}{TeX}
   % 構文
-  \overLineKK[color=色]{引数}
+  \overLineKK[color=<色>]{<テキスト>}
 
   %使用例
   \overLineKK[color=red]{あああああああああ}
@@ -229,8 +230,8 @@
 
 \begin{SourceCode}{TeX}
   % 構文
-  \nijyusen[color=色, bottom=下線最下部の位置のずれ]{引数}
-  \keshinijyusen[color=色]{引数}
+  \nijyusen[color=<色>, bottom=<下線最下部の位置のずれ>]{<テキスト>}
+  \keshinijyusen[color=<色>]{<テキスト>}
 
 
   % 使用例
@@ -270,10 +271,10 @@
 
 \begin{SourceCode}{TeX}
   % 構文
-  \thinHighLight[color=色]{引数}
-  \thickHighLight[color=色]{引数}
-  % 使用例
+  \thinHighLight[color=<色>]{<テキスト>}
+  \thickHighLight[color=<色>]{<テキスト>}
 
+  % 使用例
   \thinHighLightAuto{あああ\ruby{あ}{あ}ああああ}
   \thickHighLightAuto[color=green]{ああ\ruby{あ}{あ}あああああ}
   \thinHighLight{あああああああああ}
@@ -397,8 +398,13 @@ It is recommended to use it together with my \texttt{KKsymbols} package (already
 When the starred option is given, the contents of the argument are rotated in vertical writing\footnote{In horizontal writing, the output remains unchanged.}.）
 
 \begin{SourceCode}{TeX}
+  % 構文
+  \LineNumbering<スターオプション>{<ラベル>}[<上昇させる距離>]
+
+  % 横書き
   \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
 
+  % 縦書き
   \parbox<t>[c][6cm][c]{3cm}{%
     \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
     \LineNumbering*{ア}\underLineKK{あああああああ}
@@ -413,7 +419,7 @@ When the starred option is given, the contents of the argument are rotated in ve
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
-    \LineNumbering{\kakko{1}}\underLineKK{あああああああ}
+    \LineNumbering*{\kakko{1}}\underLineKK{あああああああ}
     \LineNumbering*{ア}\underLineKK{あああああああ}
   }
 \end{OutPut}
