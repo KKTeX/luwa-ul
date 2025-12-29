@@ -8,13 +8,19 @@ License: LPPL 1.3c
 
 Description:
 ------------
-This package provides underlining and highlighting that remain intact even in vertical writing environments and when used together with ruby text.
+This package provides underlining and highlighting that remain intact even in vertical writing environments and when used together with ruby, mathmode etc.
 
 Dependencies:
 -------------
 luacolor, xcolor, lua-ul, calc, tikz
 
-Notice
+License:
+-------------
+Released under the LaTeX Project Public License (LPPL) 1.3c.
+Copyright (c) 2025 Kosei Kawaguchi
+
+Notice:
+-------------
 This package is **LuaLaTeX-only**. 
 
 See luwa-ul-doc.tex for usage examples.

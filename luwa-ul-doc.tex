@@ -507,18 +507,24 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 
 \section{Source Code}
 \begin{lstlisting}
+  % Copyright (c) 2025 Kosei Kawaguchi
+
   \NeedsTeXFormat{LaTeX2e}
   \ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
 
   \RequirePackage{luatexja-adjust}
   \RequirePackage{luacolor, lua-ul, calc, tikz}
   \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
+
+
+  % ハイライターで使うデフォルトカラー
   \definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
 
+
+  % 縦書き補正
   \newlength{\underLine@KK@Adjust@tmp}
   \newlength{\KKUL@bottom}
   \newlength{\KKUL@height}
-
   \NewDocumentCommand{\underLine@KK@Adjust@bottom}{m}{%
     \setlength{\underLine@KK@Adjust@tmp}{\f@size pt}%
     \ifnum\ltjgetparameter{direction}=3%
@@ -527,7 +533,6 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \def\underLine@KK@Adjust@use@bottom{\dimexpr #1-\underLine@KK@Adjust@tmp/7\relax}%
     \fi%
   }
-
   \NewDocumentCommand{\underLine@KK@Adjust@height}{m}{%
     \ifnum\ltjgetparameter{direction}=3%
       \def\underLine@KK@Adjust@use@height{#1}%
@@ -535,20 +540,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \def\underLine@KK@Adjust@use@height{#1}%
     \fi%
   }
-
-  \define@key{KKUL}{bottom}{%
-    \underLine@KK@Adjust@bottom{#1}%
-    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
-  }
-
-  \define@key{KKUL}{height}{%
-    \underLine@KK@Adjust@height{#1}%
-    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-  }
-
-  \define@key{KKUL}{color}{%
-    \def\KKUL@color{#1}%
-  }
+  %%%
 
 
   % Auto Depth Adjust System 
@@ -560,10 +552,26 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \setlength{\temp@depth@kk}{-\temp@depth@kk}%
     \else%
       \settodepth{\temp@depth@kk}{#1}%
-      \addtolength{\temp@depth@kk}{-.12\zw}% 2025/11/10加筆修正
+      \addtolength{\temp@depth@kk}{-.12\zw}%
     \fi%
   }
-  \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{% 内部調整用
+  %%%
+
+
+  % 全く調整が入っていない
+  % 内部調整用の\underLineKK
+  \define@key{KKUL}{bottom}{%
+    \underLine@KK@Adjust@bottom{#1}%
+    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
+  }
+  \define@key{KKUL}{height}{%
+    \underLine@KK@Adjust@height{#1}%
+    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
+  }
+  \define@key{KKUL}{color}{%
+    \def\KKUL@color{#1}%
+  }
+  \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{%
     \underLine@KK@Adjust@bottom{-.1\zw}%
     \underLine@KK@Adjust@height{0.3pt}%
     \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
@@ -574,13 +582,13 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
   }
 
-  % 許容する（見出しなどで見た目を損なわないためなど）
+  % 自動補正なし
   \NewDocumentCommand{\underLineKK}{ O{} +m }{%
     \underLine@KK@Adjust@bottom{-.1\zw}%
     \underLine@KK@Adjust@height{0.3pt}%
     \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
     \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \ifnum\ltjgetparameter{direction}=3%
       \addtolength{\KKUL@bottom}{-.1\zw}%
     \fi%
     \def\KKUL@color{black}%
@@ -589,15 +597,15 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
   }
 
-
-  % 深さに応じて変わるタイプ
+  % 高さを自動補正
+  % 下線生成本体
   \NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
     \underLine@KK@Adjust@bottom{-.1\zw}%
     \underLine@KK@Adjust@height{0.3pt}%
     \setlength{\temp@depth@kk}{0pt}%
     \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
     \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \ifnum\ltjgetparameter{direction}=3%
       \addtolength{\KKUL@bottom}{-.1\zw}%
     \fi%
     \def\KKUL@color{black}%
@@ -606,16 +614,17 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \getdepth@kk{\underLineKK@test@contents}%
     \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
   }
+  % 数式モードの場合の調整
   \NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
-    \ifmmode
-      \mathchoice
+    \ifmmode%
+      \mathchoice%
         {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
         {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
         {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptstyle
         {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else
+    \else%
       \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi
+    \fi%
   }
   %%%
 
@@ -626,7 +635,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \setlength{\snamift@bottom}{#1}%
   }
   \define@key{snamift}{color}{%
-    \def\snamift@color{#1}
+    \def\snamift@color{#1}%
   }
 
   % 名称変更用のカウンター（グローバル変数）
@@ -725,15 +734,15 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \fi}%
   }
   \NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
-    \ifmmode
-      \mathchoice
+    \ifmmode%
+      \mathchoice%
         {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
         {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
         {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptstyle
         {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else
+    \else%
       \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi
+    \fi%
   }
   %%%
 
@@ -768,7 +777,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \xleaders\hbox{%
     \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
       \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
-      \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
+      \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);
     \end{tikzpicture}%
     }%
     }%
@@ -790,15 +799,15 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \fi}%
   }
   \NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
-    \ifmmode
-      \mathchoice
+    \ifmmode%
+      \mathchoice%
         {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
         {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
         {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptstyle
         {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else
+    \else%
       \tenKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi
+    \fi%
   }
 
   \NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
@@ -808,7 +817,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \def\stength@color{mygray@luwa-ul}%
     \def\stength@test@contents{#2}%
     \setkeys{stength}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+    \ifnum\ltjgetparameter{direction}=3%
       \addtolength{\stength@bottom}{-.1\zw}%
     \fi%
     \setlength{\temp@depth@kk}{0pt}%
@@ -819,7 +828,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
       \begin{scope}[yshift=-\temp@depth@kk]
         \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
-        \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);%.8
+        \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);
       \end{scope}
     \end{tikzpicture}%
     }%
@@ -871,7 +880,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
       \xleaders\hbox{%
         \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
+          \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK]%
+          (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
         \end{tikzpicture}%
       }%
@@ -881,7 +891,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
         \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
           % \begin{scope}[yshift=\f@size/1.1 pt]%
           \begin{scope}[yshift=\zw/1.1]%
-            \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
+            \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom]%
+            (0,0) -- (\underdash@length,0);%
             \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
           \end{scope}%
         \end{tikzpicture}%
@@ -929,22 +940,22 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
         \end{tikzpicture}%
       }%
     }%
-    {\ifnum\ltjgetparameter{direction}=3 %
+    {\ifnum\ltjgetparameter{direction}=3%
       \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
     \else%
       \csname beginUnderDash\number\underdash@id\endcsname{#2}%
     \fi}%
   }
   \NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
-    \ifmmode
-      \mathchoice
+    \ifmmode%
+      \mathchoice%
         {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
         {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
         {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptstyle
         {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else
+    \else%
       \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi
+    \fi%
   }
   %%%
 
@@ -965,8 +976,9 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \underLineKK[bottom=\overLineKK@KK@Adjust-.05\zw,color=\overLineKK@color]{#2}%
     }
 
-
   \newlength{\temp@depth@kk@over}
+
+  % overline専用の調整機構
   \NewDocumentCommand{\getdepth@kk@over}{m}{%
     \ifnum\ltjgetparameter{direction}=3%
       \settodepth{\temp@depth@kk@over}{#1}%
@@ -977,6 +989,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \setlength{\temp@depth@kk@over}{-\temp@depth@kk@over}%
     \fi%
   }
+
   \NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
     % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
     \setlength{\overLineKK@KK@Adjust}{\zw}%
@@ -986,23 +999,26 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \getdepth@kk@over{\overLineKK@test@contents}%
     \setkeys{overLine}{#1}%
     \underLineKK@plain[bottom=\overLineKK@KK@Adjust-\temp@depth@kk@over,color=\overLineKK@color]{#2}%
-    }
+  }
   %%%
 
 
-  % グレーの蛍光ペン（細くて下の方だけ塗るやつ）
+  % 蛍光ペン
+  % 通常の細めの線
   \newlength{\thinHighLight@KK@Adjust}
   \newcommand{\thinHighLight@KK@Adjust@tmp}{%
     \ifnum\ltjgetparameter{direction}=3%
       \setlength{\thinHighLight@KK@Adjust}{-.3\zw}%
     \else%
       \setlength{\thinHighLight@KK@Adjust}{0pt}%
-    \fi
+    \fi%
   }
+
   \DeclareDocumentCommand{\thinHighLight}{ O{color=gray} +m }{%
     \thinHighLight@KK@Adjust@tmp%
     \def\thinHighLight@test@contents{#2}%
-    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust]{#2}%
+    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,%
+    bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust]{#2}%
   }
 
   \DeclareDocumentCommand{\thinHighLightAuto}{ O{color=gray} +m }{%
@@ -1010,25 +1026,29 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \def\thinHighLight@test@contents{#2}%
     \setlength{\temp@depth@kk}{0pt}%
     \getdepth@kk{\thinHighLight@test@contents}%
-    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust-\temp@depth@kk]{#2}%
+    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,%
+    bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust-\temp@depth@kk]{#2}%
   }
 
 
+  % 通常の太めの線
   \newlength{\thickHighLight@KK@Adjust}
   \newcommand{\thickHighLight@KK@Adjust@tmp}{%
     \ifnum\ltjgetparameter{direction}=3%
       \setlength{\thickHighLight@KK@Adjust}{-1.1\zw}%
     \else%
       \setlength{\thickHighLight@KK@Adjust}{0pt}%
-    \fi
+    \fi%
   }
+
   \DeclareDocumentCommand{\thickHighLight}{ O{color=gray} +m }{%
     \thickHighLight@KK@Adjust@tmp%
     \def\thickHighLight@test@contents{#2}%
-    \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust]{#2}%
+    \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp,%
+    bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust]{#2}%
   }
 
-  % Auto Depth Adjust System Only For \thickHighLightAuto
+  % thickHighLightAuto専用の調整機構
   \newlength{\temp@height@kk@thickHighLight}
   \NewDocumentCommand{\getheight@kk@thickHighLight}{m}{%
     \ifnum\ltjgetparameter{direction}=3%
@@ -1039,6 +1059,7 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
       \addtolength{\temp@height@kk@thickHighLight}{-.9\zw}%
     \fi%
   }
+
   \DeclareDocumentCommand{\thickHighLightAuto}{ O{color=gray} +m }{%
     \thickHighLight@KK@Adjust@tmp%
     \def\thickHighLight@test@contents{#2}%
@@ -1047,9 +1068,11 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \getdepth@kk{\thickHighLight@test@contents}%
     \getheight@kk@thickHighLight{\thickHighLight@test@contents}%
     \ifnum\ltjgetparameter{direction}=3%
-      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\temp@depth@kk+\temp@height@kk@thickHighLight,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@height@kk@thickHighLight]{#2}%
+      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\temp@depth@kk+\temp@height@kk@thickHighLight,%
+      bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@height@kk@thickHighLight]{#2}%
     \else%
-      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp+\temp@height@kk@thickHighLight+\temp@depth@kk,bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@depth@kk]{#2}%
+      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp+\temp@height@kk@thickHighLight+\temp@depth@kk,%
+      bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@depth@kk]{#2}%
     \fi%
   }
   %%%
@@ -1071,7 +1094,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \else%
       \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
     \fi%
-    \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]{\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
+    \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]%
+    {\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
   }
 
   \NewDocumentCommand{\nijyusenAuto@make}{ O{} +m }{%
@@ -1086,36 +1110,41 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \else%
       \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
     \fi%
-    \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]{\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
+    \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]%
+    {\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
   }
   \NewDocumentCommand{\nijyusenAuto}{ O{} +m }{%
-    \ifmmode
-      \mathchoice
+    \ifmmode%
+      \mathchoice%
         {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
         {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % textstyle (inline)
         {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptstyle
         {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else
+    \else%
       \nijyusenAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi
+    \fi%
   }
 
 
+  % 二重打ち消し線
   \newlength{\keshinijyuusen@KK@Adjust}
   \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
     \ifnum\ltjgetparameter{direction}=3%
       \setlength{\keshinijyuusen@KK@Adjust}{0pt}%
     \else%
       \setlength{\keshinijyuusen@KK@Adjust}{.0646\zw}%
-    \fi
+    \fi%
   }
+
   \define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
   \NewDocumentCommand{\keshinijyusen}{ O{} +m }{%
     \def\keshinijyusen@KK@color{color=black}%
     \def\keshinijyusen@test@contents{#2}%
     \setkeys{keshinijyusen}{#1}%
     \keshinijyuusen@KK@Adjust@tmp%
-    \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{\underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}}
+    \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{%
+      \underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}%
+    }
   }
   %%%
 
@@ -1124,20 +1153,31 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
   \newcommand{\linenumbering@luwa}[1]{\raisebox{-.43\zw}{\scalebox{.6}{#1}}}
 
   \newdimen\overtline@f@size
-  \NewDocumentCommand{\tlinenumbering@luwa}{s m}{%
+  \NewDocumentCommand{\tlinenumbering@luwa}{ s m }{%
     % \setlength{\overtline@f@size}{\f@size pt}%
     \setlength{\overtline@f@size}{\zw}%
-    \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}\nolinebreak}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
-  \nolinebreak}}\hskip.0645\zw}
+    \raisebox{.6\overtline@f@size}{%
+      \IfBooleanTF{#1}{%
+        \tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}\nolinebreak%
+      }{%
+        \tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}\nolinebreak%
+      }%
+    }\hskip.0645\zw%
+  }
 
-  \NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{% 縦横両対応
+  % 縦横両対応に
+  \NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{%
     \ifnum\ltjgetparameter{direction}=3%
       \ltjghostbeforejachar%
-      \IfBooleanTF{#1}{\raisebox{#3}{\tlinenumbering@luwa*{#2}}\nolinebreak}{\raisebox{#3}{\tlinenumbering@luwa{#2}}\nolinebreak}%
-    \else
+      \IfBooleanTF{#1}{%
+        \raisebox{#3}{\tlinenumbering@luwa*{#2}}\nolinebreak%
+      }{%
+        \raisebox{#3}{\tlinenumbering@luwa{#2}}\nolinebreak%
+      }%
+    \else%
       \ltjghostbeforejachar%
       \raisebox{#3}{\linenumbering@luwa{#2}\nolinebreak}%
-    \fi
+    \fi%
   }
   %%%
 
