@@ -683,10 +683,13 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \global\advance\snamift@id by 1\relax%
     \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
       \cleaders\hbox{%
-        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
+        % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
+        \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
           \begin{scope}[yshift=-\temp@depth@kk]
-            \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-            \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+            % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+            \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
+            % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+            \draw[line width=\zw/24 , yshift=\snamift@bottom, \snamift@color]
               (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
               sin (5,1) cos (6,0);
           \end{scope}
@@ -695,10 +698,14 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     }%
     \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
       \cleaders\hbox{%
-        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
-          \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
-            \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-            \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+        % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
+        \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
+          % \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
+          \begin{scope}[yshift=\zw/1.2 - \temp@depth@kk]
+            % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
+            \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
+            % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+            \draw[line width=\zw/24, yshift=\snamift@bottom, \snamift@color]
               (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
               sin (5,1) cos (6,0);
           \end{scope}
@@ -762,7 +769,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
     \xleaders\hbox{%
     \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      \begin{scope}[yshift=\f@size/1.1 pt]
+      % \begin{scope}[yshift=\f@size/1.1 pt]
+      \begin{scope}[yshift=\zw/1.1]
       \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
       \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
       \end{scope}
@@ -813,7 +821,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
     \xleaders\hbox{%
     \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]
+      % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]
+      \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]
       \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
       \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
       \end{scope}
@@ -864,7 +873,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
       \xleaders\hbox{%
         \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          \begin{scope}[yshift=\f@size/1.1 pt]%
+          % \begin{scope}[yshift=\f@size/1.1 pt]%
+          \begin{scope}[yshift=\zw/1.1]%
             \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
             \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
           \end{scope}%
@@ -905,7 +915,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
       \xleaders\hbox{%
         \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]%
+          % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]%
+          \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]%
             \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
             \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
           \end{scope}%
@@ -940,7 +951,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
   \newlength{\overLineKK@KK@Adjust}
 
   \NewDocumentCommand{\overLineKK}{ O{} +m }{%
-    \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+    % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+    \setlength{\overLineKK@KK@Adjust}{\zw}%
     \def\overLineKK@color{black}%
     \def\overLineKK@test@contents{#2}%
     \setkeys{overLine}{#1}%
@@ -960,7 +972,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
     \fi%
   }
   \NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
-    \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+    % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
+    \setlength{\overLineKK@KK@Adjust}{\zw}%
     \setlength{\temp@depth@kk@over}{0pt}%
     \def\overLineKK@color{black}%
     \def\overLineKK@test@contents{#2}%
@@ -1106,7 +1119,8 @@ Released under the LaTeX Project Public License (LPPL) 1.3c.
 
   \newdimen\overtline@f@size
   \NewDocumentCommand{\tlinenumbering@luwa}{s m}{%
-    \setlength{\overtline@f@size}{\f@size pt}%
+    % \setlength{\overtline@f@size}{\f@size pt}%
+    \setlength{\overtline@f@size}{\zw}%
     \raisebox{.6\overtline@f@size}{\IfBooleanTF{#1}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}\nolinebreak}{\tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}%
   \nolinebreak}}\hskip.0645\zw}
 
