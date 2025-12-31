@@ -1,11 +1,9 @@
 \documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,caption}
 \usepackage{luwa-ul}
-\usepackage{hyperref}
-\usepackage{caption}
 \usepackage[most]{tcolorbox}
-\usepackage{fp}
-\usepackage{lltjext}
-\usepackage{luatexja-ruby}
+\usepackage{luatexja-ruby, lltjext}
 \usepackage{KKsymbols}
 
 \usepackage{listings}
@@ -20,22 +18,25 @@
 }
 
 % You can omit these font settings.
+\makeatletter
 \RequirePackage[no-math]{fontspec}
 \RequirePackage[no-math,match,scale=1]{luatexja-fontspec}
 \RequirePackage[hiragino-pro,deluxe,expert]{luatexja-preset}
-\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\renewfontfamily{\sffamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\renewfontfamily{\mcfamily}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\renewfontfamily{\gtfamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\providefontfamily{\mgfamily}{HiraMaruPro-W4}
-\newfontfamily{\sfhira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]\newjfontfamily{\sfhiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\newfontfamily{\mchira}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\newjfontfamily{\mchiraj}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\newfontfamily{\gthira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]\newjfontfamily{\gthiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
-\newfontfamily{\mghira}{HiraMaruPro-W4}\newjfontfamily{\mghiraj}{HiraMaruPro-W4}
-\renewcommand{\sffamily}{\sfhira\sfhiraj}
-\renewcommand{\mcfamily}{\mchira\mchiraj}
-\renewcommand{\gtfamily}{\gthira\gthiraj}
-\renewcommand{\mgfamily}{\mghira\mghiraj}
+\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\sfhira@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newjfontfamily{\sfhiraj@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newfontfamily{\mchira@pre}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newjfontfamily{\mchiraj@pre}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\gthira@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newjfontfamily{\gthiraj@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newfontfamily{\mghira@pre}{HiraMaruPro-W4}
+\newjfontfamily{\mghiraj@pre}{HiraMaruPro-W4}
+\renewcommand{\sffamily}{\sfhira@pre\sfhiraj@pre}
+\renewcommand{\mcfamily}{\mchira@pre\mchiraj@pre}
+\renewcommand{\gtfamily}{\gthira@pre\gthiraj@pre}
+\renewcommand{\mgfamily}{\mghira@pre\mghiraj@pre}
+\makeatother
 %%%
 
 
@@ -51,7 +52,7 @@
 
 \colorlet{grayLight}{white!80!black} 
 
-\NewTCBListing{SourceCode}{ O{Input} m !o !O{DeepSkyBlue3} }{%
+\NewTCBListing{SourceCode}{ m m !o !O{DeepSkyBlue3} }{%
   enhanced, colback=black!70, colframe=Snow4,
   toptitle=-1mm, bottomtitle=-1mm,
   righttitle=-1mm, lefttitle=-1mm,
@@ -157,7 +158,7 @@
 
 使い方は以下のようになります。（You can use it as follows: ）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \underLineKK[color=<色>, bottom=<下線最下部の位置のずれ>,
   heigth=<下線の太さ（bottomの位置からの距離で計算）>]{<テキスト>}
@@ -193,7 +194,7 @@
 \subsection{\textbackslash overLineKK}
 このコマンドは\verb|\underLineKK|を使用しても作成が可能ですが、ショートカットとして用意しておきました。このコマンドは縦書き環境においては通常の\verb|\underLineKK|につけてあったルビ補正を抜いてあります。（This command can also be created using \verb|\underLineKK|, but it has been provided as a shortcut. In a vertical writing environment, this command omits the ruby adjustment that was included in the standard \verb|\underLineKK|.）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \overLineKK[color=<色>]{<テキスト>}
 
@@ -228,7 +229,7 @@
 \subsection{\textbackslash nijyusen, \textbackslash keshinijyusen}
 これらのコマンドは\verb|\underLineKK|を入れ子にすることでも作成が可能ですが、\verb|keshinijyusen|に関してはルビの有無による補正をなくしてあります。（These commands can also be created by nesting \verb|\underLineKK|, but for \verb|keshinijyusen|, the adjustment for the presence or absence of ruby has been removed.）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \nijyusen[color=<色>, bottom=<下線最下部の位置のずれ>]{<テキスト>}
   \keshinijyusen[color=<色>]{<テキスト>}
@@ -269,7 +270,7 @@
 \subsection{\textbackslash thinHighLight, \textbackslash thickHighLight}
 これらは蛍光ペンを引いたような出力を提供するコマンドです。ルビの有無に対する挙動が\verb|\underLineKK|のそれとは少々異なり、単なる並行移動だけではなく線の太さ自体も追随して動くという仕様にしてあります。（These are commands that provide an output resembling a highlight made with a fluorescent marker. Their behavior regarding the presence or absence of ruby differs slightly from that of \verb|\underLineKK|, as they are designed not only to shift position but also to have the line thickness itself adjust accordingly.）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \thinHighLight[color=<色>]{<テキスト>}
   \thickHighLight[color=<色>]{<テキスト>}
@@ -319,7 +320,7 @@
 \subsection{\textbackslash namiKK}
 このコマンドは波線を引くコマンドを提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。（This command provides a wavy underline. Its behavior with respect to ruby is the same as that of \verb|\underLineKK|. ）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \namiKK[color=色, bottom=下線最下部の位置のずれ]{引数}
 
@@ -355,7 +356,7 @@
 \subsection{\textbackslash tenKK, \textbackslash dashKK}
 これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。（These commands provide dotted and dashed underlines, respectively. Their behavior toward ruby text is the same as that of \verb|\underLineKK|.）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \tenKK[color=色, bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
   % デフォルト：radius=.1ex, distance=.4ex
   \dashKK[color=色, bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
@@ -397,7 +398,7 @@
 It is recommended to use it together with my \texttt{KKsymbols} package (already included in TeX Live).
 When the starred option is given, the contents of the argument are rotated in vertical writing\footnote{In horizontal writing, the output remains unchanged.}.）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \LineNumbering<スターオプション>{<ラベル>}[<上昇させる距離>]
 
@@ -427,7 +428,7 @@ When the starred option is given, the contents of the argument are rotated in ve
 \subsection{自動調節シリーズの詳細（Auto Series）}
 このシリーズは、v1.1.0にて追加された新たなモデルで、主に積分記号などの大きな記号が引数内部に含まれる場合に威力を発揮するコマンド群です。（These commands are added on v1.1.0 update. When you include \verb|\int| or so in the argument, the difference between Manual Series and Auto Series are critcal.）通常のManual Seriesとの違いは（You can see how defferent they are as follows: ）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \underLineKK{$\displaystyle \int_{a}^{b} f(x) \, dx$}
   \underLineKKAuto{$\displaystyle \int_{a}^{b} f(x) \, dx$}
 
@@ -479,7 +480,7 @@ Therefore, it is not suitable for cases where you want to underline a large port
 
 例えば、（For example, ）
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   以上より、
   \[f(x)=\namiKKAuto{\frac{x+\frac{a}{b}}{x^4+\frac{c}{d}}} \ \text{……\kakko{答}}\]
   \noindent となります。
@@ -507,8 +508,6 @@ Released under the MIT License.
 
 \section{Source Code}
 \begin{lstlisting}
-  % Copyright (c) 2025 Kosei Kawaguchi
-
   \NeedsTeXFormat{LaTeX2e}
   \ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
 
