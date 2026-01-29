@@ -1,7 +1,7 @@
 # ----- setting ------
 SAMPLE_TARGET = luw-ul-sample
 DOC_TARGET = luwa-ul-doc
-TEST_TARGET = test
+TEST_TARGET = luwa-ul-test
 RC     = .latexmkrc
 
 

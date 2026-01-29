@@ -24,23 +24,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
+\ProvidesPackage{luwa-ul}[2026/01/30, Version 1.2.5]
 
 \RequirePackage{luatexja-adjust}
 \RequirePackage{luacolor, lua-ul, calc, tikz}
 \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
 
 
-% ハイライターで使うデフォルトカラー
+%%% colors
 \definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
+%%%
 
 
-% 縦書き補正
+%%% horizontal-vertical adjust
 \newlength{\underLine@KK@Adjust@tmp}
 \newlength{\KKUL@bottom}
 \newlength{\KKUL@height}
 \NewDocumentCommand{\underLine@KK@Adjust@bottom}{m}{%
-  \setlength{\underLine@KK@Adjust@tmp}{\f@size pt}%
+  \setlength{\underLine@KK@Adjust@tmp}{\zw}%
   \ifnum\ltjgetparameter{direction}=3%
     \def\underLine@KK@Adjust@use@bottom{\dimexpr -#1+\underLine@KK@Adjust@tmp/2\relax}%
   \else%
@@ -57,7 +58,7 @@
 %%%
 
 
-% Auto Depth Adjust System 
+%%% Auto Depth Adjust System 
 \newlength{\temp@depth@kk}
 \NewDocumentCommand{\getdepth@kk}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
@@ -72,8 +73,8 @@
 %%%
 
 
-% 全く調整が入っていない
-% 内部調整用の\underLineKK
+%%% \underLineKK
+% totally-plain
 \define@key{KKUL}{bottom}{%
   \underLine@KK@Adjust@bottom{#1}%
   \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
@@ -96,7 +97,7 @@
   \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
 }
 
-% 自動補正なし
+% Manual
 \NewDocumentCommand{\underLineKK}{ O{} +m }{%
   \underLine@KK@Adjust@bottom{-.1\zw}%
   \underLine@KK@Adjust@height{0.3pt}%
@@ -111,8 +112,7 @@
   \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
 }
 
-% 高さを自動補正
-% 下線生成本体
+% Auto
 \NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
   \underLine@KK@Adjust@bottom{-.1\zw}%
   \underLine@KK@Adjust@height{0.3pt}%
@@ -128,22 +128,22 @@
   \getdepth@kk{\underLineKK@test@contents}%
   \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
 }
-% 数式モードの場合の調整
+% mathmode-adjust
 \NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
   \ifmmode%
     \mathchoice%
-      {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptstyle
-      {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+      {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}}      % displaystyle
+      {\mbox{\underLineKKAuto@make[#1]{$\textstyle #2$}}}         % textstyle (inline)
+      {\mbox{\underLineKKAuto@make[#1]{$\scriptstyle #2$}}}       % scriptstyle
+      {\mbox{\underLineKKAuto@make[#1]{$\scriptscriptstyle #2$}}} % scriptscriptstyle
   \else%
-    \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \underLineKKAuto@make[#1]{#2}%
   \fi%
 }
 %%%
 
 
-% lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）
+%%% \namiKK（元の名称はsnamiftだが、変更）
 \newlength{\snamift@bottom}\setlength{\snamift@bottom}{0pt}
 \define@key{snamift}{bottom}{%
   \setlength{\snamift@bottom}{#1}%
@@ -161,7 +161,7 @@
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
-  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+  \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\snamift@bottom}{-.1\zw}%
   \fi%
   % ２：IDを進める
@@ -169,10 +169,10 @@
   % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
   \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
     \cleaders\hbox{%
-      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
-                          x=\f@size/12 pt,y=\f@size/25 pt]
-        \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-        \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+      \begin{tikzpicture}[xscale=.8,baseline=\zw/4 pt,
+                          x=\zw/12 pt,y=\zw/25 pt]
+        \clip[yshift=\snamift@bottom] (1,\zw/8 pt) rectangle (5,-\zw/8 pt);
+        \draw[line width=\zw/24 pt,yshift=\snamift@bottom,\snamift@color]
           (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
           sin (5,1) cos (6,0);
       \end{tikzpicture}%
@@ -180,11 +180,11 @@
   }%
   \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
     \cleaders\hbox{%
-      \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
-                          x=\f@size/12 pt,y=\f@size/25 pt]
-        \begin{scope}[yshift=\f@size/1.2 pt]
-          \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-          \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
+      \begin{tikzpicture}[xscale=.8,baseline=\zw/4 pt,
+                          x=\zw/12 pt,y=\zw/25 pt]
+        \begin{scope}[yshift=\zw/1.2 pt]
+          \clip[yshift=\snamift@bottom] (1,\zw/8 pt) rectangle (5,-\zw/8 pt);
+          \draw[line width=\zw/24 pt,yshift=\snamift@bottom,\snamift@color]
             (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
             sin (5,1) cos (6,0);
         \end{scope}
@@ -204,7 +204,7 @@
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
   \setkeys{snamift}{#1}%
-  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+  \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\snamift@bottom}{-.1\zw}%
   \fi%
   \setlength{\temp@depth@kk}{0pt}%
@@ -212,12 +212,9 @@
   \global\advance\snamift@id by 1\relax%
   \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
     \cleaders\hbox{%
-      % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
       \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
         \begin{scope}[yshift=-\temp@depth@kk]
-          % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
           \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
-          % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
           \draw[line width=\zw/24 , yshift=\snamift@bottom, \snamift@color]
             (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
             sin (5,1) cos (6,0);
@@ -227,13 +224,9 @@
   }%
   \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
     \cleaders\hbox{%
-      % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
       \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
-        % \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
         \begin{scope}[yshift=\zw/1.2 - \temp@depth@kk]
-          % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
           \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
-          % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
           \draw[line width=\zw/24, yshift=\snamift@bottom, \snamift@color]
             (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
             sin (5,1) cos (6,0);
@@ -250,18 +243,18 @@
 \NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
   \ifmmode%
     \mathchoice%
-      {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptstyle
-      {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+      {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}}%
+      {\mbox{\namiKKAuto@make[#1]{$\textstyle #2$}}}%
+      {\mbox{\namiKKAuto@make[#1]{$\scriptstyle #2$}}}%
+      {\mbox{\namiKKAuto@make[#1]{$\scriptscriptstyle #2$}}}%
   \else%
-    \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \namiKKAuto@make[#1]{#2}%
   \fi%
 }
 %%%
 
 
-% lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）
+%%% \tenKK, \dashKK（元の名称はstengthとsdashgthだが、変更）
 \newlength{\sladj@tenKK@dashKK}
 \sladj@tenKK@dashKK =.07\zw
 
@@ -283,7 +276,7 @@
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
   \setkeys{stength}{#1}%
-  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+  \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\stength@bottom}{-.1\zw}%
   \fi%
   \global\advance\stength@id by 1\relax%
@@ -298,7 +291,6 @@
   \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
   \xleaders\hbox{%
   \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-    % \begin{scope}[yshift=\f@size/1.1 pt]
     \begin{scope}[yshift=\zw/1.1]
     \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
     \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
@@ -315,12 +307,12 @@
 \NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
   \ifmmode%
     \mathchoice%
-      {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptstyle
-      {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+      {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}}% 
+      {\mbox{\tenKKAuto@make[#1]{$\textstyle #2$}}}%
+      {\mbox{\tenKKAuto@make[#1]{$\scriptstyle #2$}}}%
+      {\mbox{\tenKKAuto@make[#1]{$\scriptscriptstyle #2$}}}%
   \else%
-    \tenKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \tenKKAuto@make[#1]{#2}%
   \fi%
 }
 
@@ -350,7 +342,6 @@
   \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
   \xleaders\hbox{%
   \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-    % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]
     \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]
     \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
     \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
@@ -387,7 +378,7 @@
   \def\underdashgth@color{black}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
-  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+  \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\underdash@bottom}{-.1\zw}%
   \fi%
   \global\advance\underdash@id by 1\relax%
@@ -403,7 +394,6 @@
   \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
     \xleaders\hbox{%
       \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-        % \begin{scope}[yshift=\f@size/1.1 pt]%
         \begin{scope}[yshift=\zw/1.1]%
           \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom]%
           (0,0) -- (\underdash@length,0);%
@@ -427,7 +417,7 @@
   \def\underdashgth@color{black}%
   \def\sdashgth@test@contents{#2}%
   \setkeys{underdashgth}{#1}%
-  \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
+  \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\underdash@bottom}{-.1\zw}%
   \fi%
   \setlength{\temp@depth@kk}{0pt}%
@@ -446,7 +436,6 @@
   \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
     \xleaders\hbox{%
       \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-        % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]%
         \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]%
           \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
           \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
@@ -463,18 +452,18 @@
 \NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
   \ifmmode%
     \mathchoice%
-      {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptstyle
-      {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+      {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}}%
+      {\mbox{\dashKKAuto@make[#1]{$\textstyle #2$}}}%
+      {\mbox{\dashKKAuto@make[#1]{$\scriptstyle #2$}}}%
+      {\mbox{\dashKKAuto@make[#1]{$\scriptscriptstyle #2$}}}%
   \else%
-    \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \dashKKAuto@make[#1]{#2}%
   \fi%
 }
 %%%
 
 
-% overLine
+%%% \overLine
 \define@key{overLine}{color}{%
   \def\overLineKK@color{#1}%
 }
@@ -482,7 +471,6 @@
 \newlength{\overLineKK@KK@Adjust}
 
 \NewDocumentCommand{\overLineKK}{ O{} +m }{%
-  % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
   \setlength{\overLineKK@KK@Adjust}{\zw}%
   \def\overLineKK@color{black}%
   \def\overLineKK@test@contents{#2}%
@@ -505,7 +493,6 @@
 }
 
 \NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
-  % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
   \setlength{\overLineKK@KK@Adjust}{\zw}%
   \setlength{\temp@depth@kk@over}{0pt}%
   \def\overLineKK@color{black}%
@@ -517,7 +504,7 @@
 %%%
 
 
-% 蛍光ペン
+%%% hilighters
 % 通常の細めの線
 \newlength{\thinHighLight@KK@Adjust}
 \newcommand{\thinHighLight@KK@Adjust@tmp}{%
@@ -592,7 +579,7 @@
 %%%
 
 
-% 二重線
+%%% \nijyusen 
 \newlength{\nijyusen@bottom}
 \newlength{\nijyusen@bottom@adjust}
 
@@ -630,17 +617,18 @@
 \NewDocumentCommand{\nijyusenAuto}{ O{} +m }{%
   \ifmmode%
     \mathchoice%
-      {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % textstyle (inline)
-      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptstyle
-      {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptscriptstyle
+      {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}}%
+      {\mbox{\nijyusenAuto@make[#1]{$\textstyle #2$}}}%
+      {\mbox{\nijyusenAuto@make[#1]{$\scriptstyle #2$}}}%
+      {\mbox{\nijyusenAuto@make[#1]{$\scriptscriptstyle #2$}}}%
   \else%
-    \nijyusenAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
+    \nijyusenAuto@make[#1]{#2}%
   \fi%
 }
+%%%
 
 
-% 二重打ち消し線
+%%% \keshinijyusen 
 \newlength{\keshinijyuusen@KK@Adjust}
 \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
   \ifnum\ltjgetparameter{direction}=3%
@@ -663,12 +651,11 @@
 %%%
 
 
-% 下線の前に番号を振る
+%%% \LineNumbering
 \newcommand{\linenumbering@luwa}[1]{\raisebox{-.43\zw}{\scalebox{.6}{#1}}}
 
 \newdimen\overtline@f@size
 \NewDocumentCommand{\tlinenumbering@luwa}{ s m }{%
-  % \setlength{\overtline@f@size}{\f@size pt}%
   \setlength{\overtline@f@size}{\zw}%
   \raisebox{.6\overtline@f@size}{%
     \IfBooleanTF{#1}{%
@@ -679,7 +666,7 @@
   }\hskip.0645\zw%
 }
 
-% 縦横両対応に
+% horizontal-vertical
 \NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{%
   \ifnum\ltjgetparameter{direction}=3%
     \ltjghostbeforejachar%
