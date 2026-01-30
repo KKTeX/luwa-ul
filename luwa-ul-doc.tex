@@ -4,18 +4,7 @@
 \usepackage{luwa-ul}
 \usepackage[most]{tcolorbox}
 \usepackage{luatexja-ruby, lltjext}
-\usepackage{KKsymbols}
-
-\usepackage{listings}
-\lstset{
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue},
-    commentstyle=\color{gray},
-    stringstyle=\color{red},
-    breaklines=true,
-    breakatwhitespace=false,  
-    columns=flexible           
-}
+\usepackage{KKsymbols, KKluaverb}
 
 % You can omit these font settings.
 \makeatletter
@@ -89,7 +78,7 @@
 
 \title{\texttt{luwa-ul} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.2.1 (2025/12/28)}
+\date{Version 1.2.5 (2026/01/30)}
 
 \begin{document}
 \begin{titlepage}
@@ -109,6 +98,7 @@
   \item luacolor, xcolor
   \item lua-ul
   \item calc, tikz
+  \item luatexja-adjust (from v1.2.5 onwards)
 \end{itemize}
 
 \noindent を内部的に仕様しています。（This package uses them internally.）
@@ -139,7 +129,7 @@
 
 使い分けは、\namiKK{線を突き破り得る引数（ルビやインテグラルなど）をとる場合にはAutoシリーズを推奨、それ以外の用途ではManualシリーズを推奨}としておきます。ただし、\namiKK{縦書きでは基本的にAutoシリーズをメインとすることを推奨とします。}
 
-\subsection{\textbackslash underLineKK}
+\subsection{\KKverb|underLineKK|}
 このコマンドは、\texttt{lua-ul}パッケージによって提供される\verb|\underLine|コマンドに対し、
 
 \begin{itemize}
@@ -165,12 +155,12 @@
 
   % 使用例
   \underLineKK[color=red]{あああああああああ}
-  \underLineKK[bottom=.5em]{あああああああああ}
+  \underLineKK[bottom=.5\zw]{あああああああああ}
   \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \underLineKK[color=red]{あああああああああ}
-    \underLineKK[bottom=.5em]{あああああああああ}
+    \underLineKK[bottom=.5\zw]{あああああああああ}
     \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
   }
 \end{SourceCode}
@@ -179,19 +169,19 @@
   横書き：
 
   \underLineKK[color=red]{あああああああああ}
-  \underLineKK[bottom=.5em]{あああああああああ}
+  \underLineKK[bottom=.5\zw]{あああああああああ}
   \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \underLineKK[color=red]{あああああああああ}
-    \underLineKK[bottom=.5em]{あああああああああ}
+    \underLineKK[bottom=.5\zw]{あああああああああ}
     \underLineKKAuto{ああ\ruby{あ}{あ}あああああ}
   }
 \end{OutPut}
 
-\subsection{\textbackslash overLineKK}
+\subsection{\KKverb|\overLineKK|}
 このコマンドは\verb|\underLineKK|を使用しても作成が可能ですが、ショートカットとして用意しておきました。このコマンドは縦書き環境においては通常の\verb|\underLineKK|につけてあったルビ補正を抜いてあります。（This command can also be created using \verb|\underLineKK|, but it has been provided as a shortcut. In a vertical writing environment, this command omits the ruby adjustment that was included in the standard \verb|\underLineKK|.）
 
 \begin{SourceCode}{Input}{TeX}
@@ -226,7 +216,7 @@
   }
 \end{OutPut}
 
-\subsection{\textbackslash nijyusen, \textbackslash keshinijyusen}
+\subsection{\KKverb|\nijyusen|, \KKverb|\keshinijyusen|}
 これらのコマンドは\verb|\underLineKK|を入れ子にすることでも作成が可能ですが、\verb|keshinijyusen|に関してはルビの有無による補正をなくしてあります。（These commands can also be created by nesting \verb|\underLineKK|, but for \verb|keshinijyusen|, the adjustment for the presence or absence of ruby has been removed.）
 
 \begin{SourceCode}{Input}{TeX}
@@ -267,7 +257,7 @@
   }
 \end{OutPut}
 
-\subsection{\textbackslash thinHighLight, \textbackslash thickHighLight}
+\subsection{\KKverb|\thinHighLight|, \KKverb|\thickHighLight|}
 これらは蛍光ペンを引いたような出力を提供するコマンドです。ルビの有無に対する挙動が\verb|\underLineKK|のそれとは少々異なり、単なる並行移動だけではなく線の太さ自体も追随して動くという仕様にしてあります。（These are commands that provide an output resembling a highlight made with a fluorescent marker. Their behavior regarding the presence or absence of ruby differs slightly from that of \verb|\underLineKK|, as they are designed not only to shift position but also to have the line thickness itself adjust accordingly.）
 
 \begin{SourceCode}{Input}{TeX}
@@ -317,7 +307,7 @@
   }
 \end{OutPut}
 
-\subsection{\textbackslash namiKK}
+\subsection{\KKverb|\namiKK|}
 このコマンドは波線を引くコマンドを提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。（This command provides a wavy underline. Its behavior with respect to ruby is the same as that of \verb|\underLineKK|. ）
 
 \begin{SourceCode}{Input}{TeX}
@@ -327,12 +317,12 @@
   % 使用例
   \namiKK[color=green]{あああ\ruby{あ}{あ}ああああ}
   \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
-  \namiKK[bottom=-.5em]{あああああああああ}
+  \namiKK[bottom=-.5\zw]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \namiKK[color=green]{あああ\ruby{あ}{あ}ああああ}
     \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
-    \namiKK[bottom=-.5em]{あああああああああ}
+    \namiKK[bottom=-.5\zw]{あああああああああ}
   }
 \end{SourceCode}
 
@@ -341,37 +331,37 @@
 
   \namiKK[color=green]{あああ\ruby{あ}{あ}ああああ}
   \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
-  \namiKK[bottom=-.5em]{あああああああああ}
+  \namiKK[bottom=-.5\zw]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \namiKK[color=green]{あああ\ruby{あ}{あ}ああああ}
     \namiKKAuto{あああ\ruby{あ}{あ}ああああ}
-    \namiKK[bottom=-.5em]{あああああああああ}
+    \namiKK[bottom=-.5\zw]{あああああああああ}
   }
 \end{OutPut}
 
 
-\subsection{\textbackslash tenKK, \textbackslash dashKK}
+\subsection{\KKverb|\tenKK|, \KKverb|\dashKK|}
 これらはそれぞれ、点線、破線を提供します。ルビに対する挙動は\verb|\underLineKK|のそれに同じです。（These commands provide dotted and dashed underlines, respectively. Their behavior toward ruby text is the same as that of \verb|\underLineKK|.）
 
 \begin{SourceCode}{Input}{TeX}
   \tenKK[color=色, bottom=下線最下部の位置のずれ, radius=ドットの半径, distance=ドット間距離]{引数}
-  % デフォルト：radius=.1ex, distance=.4ex
+  % デフォルト：radius=.05\zw, distance=.2\zw
   \dashKK[color=色, bottom=下線最下部の位置のずれ, width=破線の太さ, distance=破線間距離, length=破線の長さ]{引数}
-  % デフォルト：width=.2pt, distance=.3ex, length=.4ex
+  % デフォルト：width=.2pt, length=.2\zw, distance=.15\zw
 
   \tenKKAuto[color=blue]{あああああ\ruby{あ}{あ}ああ}
-  \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+  \tenKK[radius=\zw, distance=.4\zw]{あああああああああ}
   \dashKKAuto[color=red]{あああああ\ruby{あ}{あ}ああ}
-  \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
+  \dashKK[length=.05\zw, distance=.3\zw]{あああああああああ}
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \tenKKAuto[color=blue]{あああああ\ruby{あ}{あ}ああ}
-    \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+    \tenKK[radius=\zw, distance=.4\zw]{あああああああああ}
     \dashKKAuto[color=red]{あああああ\ruby{あ}{あ}ああ}
-    \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
+    \dashKK[length=.05\zw, distance=.3\zw]{あああああああああ}
   }
 \end{SourceCode}
 
@@ -379,21 +369,21 @@
   横書き：
 
   \tenKKAuto[color=blue]{あああああ\ruby{あ}{あ}ああ}
-  \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+  \tenKK[radius=\zw, distance=.4\zw]{あああああああああ}
   \dashKKAuto[color=red]{あああああ\ruby{あ}{あ}ああ}
-  \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
+  \dashKK[length=.05\zw, distance=.3\zw]{あああああああああ}
 
   縦書き：
 
   \parbox<t>[c][6cm][c]{3cm}{%
     \tenKKAuto[color=blue]{あああああ\ruby{あ}{あ}ああ}
-    \tenKK[radius=.05ex, distance=.3ex]{あああああああああ}
+    \tenKK[radius=\zw, distance=.4\zw]{あああああああああ}
     \dashKKAuto[color=red]{あああああ\ruby{あ}{あ}ああ}
-    \dashKK[length=.01ex, distance=.1ex]{あああああああああ}
+    \dashKK[length=.05\zw, distance=.3\zw]{あああああああああ}
   }
 \end{OutPut}
 
-\subsection{\textbackslash LineNumbering}
+\subsection{\KKverb|\LineNumbering|}
 下線に番号を振るためのコマンドです。これは私が作成した\texttt{KKsymbols}パッケージ（TeX Liveに収録済み）との併用をお勧めしています。スターオプションを付与すると、縦書きの時には引数の中身が回転します\footnote{横書きの時には出力に変化はありません。}。（This command assigns numbers to underlines.
 It is recommended to use it together with my \texttt{KKsymbols} package (already included in TeX Live).
 When the starred option is given, the contents of the argument are rotated in vertical writing\footnote{In horizontal writing, the output remains unchanged.}.）
@@ -504,682 +494,11 @@ Released under the MIT License.
   \item \textbf{v1.1.1 (2025/11/10)} --- Slightly adjusted the move of Auto Series.
   \item \textbf{v1.2.0 (2025/11/25)} --- Get rid of specific adjustment when \verb|\ruby| is used in Manual Series and Auto Series takes over the role. Also, slightly changed internal length adjusting parameter.
   \item \textbf{v1.2.1 (2025/12/28)} --- Fixed a problem cased by using ex scale. Also, \verb|\LineNumbering| was slightly improved.
+  \item \textbf{v1.2.5 (2026/01/30)} --- Fllowing two points are changed.
+    \begin{itemize}
+      \item Fixed a bug affecting behavior within \verb|\scriptstyle| and \verb|\scriptscriptstyle|.
+      \item Replaced all instances of \verb|\f@size| and \verb|ex| with \verb|\zw| to better optimize for Japanese typesetting environments.
+    \end{itemize}
 \end{itemize}
 
-\section{Source Code}
-\begin{lstlisting}
-  \NeedsTeXFormat{LaTeX2e}
-  \ProvidesPackage{luwa-ul}[2025/12/28, Version 1.2.1]
-
-  \RequirePackage{luatexja-adjust}
-  \RequirePackage{luacolor, lua-ul, calc, tikz}
-  \RequirePackage[dvipsnames, svgnames, x11names]{xcolor}
-
-
-  % ハイライターで使うデフォルトカラー
-  \definecolor{mygray@luwa-ul}{RGB}{60, 60, 60}
-
-
-  % 縦書き補正
-  \newlength{\underLine@KK@Adjust@tmp}
-  \newlength{\KKUL@bottom}
-  \newlength{\KKUL@height}
-  \NewDocumentCommand{\underLine@KK@Adjust@bottom}{m}{%
-    \setlength{\underLine@KK@Adjust@tmp}{\f@size pt}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \def\underLine@KK@Adjust@use@bottom{\dimexpr -#1+\underLine@KK@Adjust@tmp/2\relax}%
-    \else%
-      \def\underLine@KK@Adjust@use@bottom{\dimexpr #1-\underLine@KK@Adjust@tmp/7\relax}%
-    \fi%
-  }
-  \NewDocumentCommand{\underLine@KK@Adjust@height}{m}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \def\underLine@KK@Adjust@use@height{#1}%
-    \else%
-      \def\underLine@KK@Adjust@use@height{#1}%
-    \fi%
-  }
-  %%%
-
-
-  % Auto Depth Adjust System 
-  \newlength{\temp@depth@kk}
-  \NewDocumentCommand{\getdepth@kk}{m}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \settoheight{\temp@depth@kk}{#1}%
-      \addtolength{\temp@depth@kk}{-.5\zw}%
-      \setlength{\temp@depth@kk}{-\temp@depth@kk}%
-    \else%
-      \settodepth{\temp@depth@kk}{#1}%
-      \addtolength{\temp@depth@kk}{-.12\zw}%
-    \fi%
-  }
-  %%%
-
-
-  % 全く調整が入っていない
-  % 内部調整用の\underLineKK
-  \define@key{KKUL}{bottom}{%
-    \underLine@KK@Adjust@bottom{#1}%
-    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
-  }
-  \define@key{KKUL}{height}{%
-    \underLine@KK@Adjust@height{#1}%
-    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-  }
-  \define@key{KKUL}{color}{%
-    \def\KKUL@color{#1}%
-  }
-  \NewDocumentCommand{\underLineKK@plain}{ O{} +m }{%
-    \underLine@KK@Adjust@bottom{-.1\zw}%
-    \underLine@KK@Adjust@height{0.3pt}%
-    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
-    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-    \def\KKUL@color{black}%
-    \def\underLineKK@test@contents{#2}%
-    \setkeys{KKUL}{#1}%
-    \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
-  }
-
-  % 自動補正なし
-  \NewDocumentCommand{\underLineKK}{ O{} +m }{%
-    \underLine@KK@Adjust@bottom{-.1\zw}%
-    \underLine@KK@Adjust@height{0.3pt}%
-    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
-    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \addtolength{\KKUL@bottom}{-.1\zw}%
-    \fi%
-    \def\KKUL@color{black}%
-    \def\underLineKK@test@contents{#2}%
-    \setkeys{KKUL}{#1}%
-    \underLine[bottom=\KKUL@bottom, height=\KKUL@height, color=\KKUL@color]{#2}%
-  }
-
-  % 高さを自動補正
-  % 下線生成本体
-  \NewDocumentCommand{\underLineKKAuto@make}{ O{} +m }{%
-    \underLine@KK@Adjust@bottom{-.1\zw}%
-    \underLine@KK@Adjust@height{0.3pt}%
-    \setlength{\temp@depth@kk}{0pt}%
-    \setlength{\KKUL@bottom}{\underLine@KK@Adjust@use@bottom}%
-    \setlength{\KKUL@height}{\underLine@KK@Adjust@use@height}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \addtolength{\KKUL@bottom}{-.1\zw}%
-    \fi%
-    \def\KKUL@color{black}%
-    \def\underLineKK@test@contents{#2}%
-    \setkeys{KKUL}{#1}%
-    \getdepth@kk{\underLineKK@test@contents}%
-    \underLine[bottom=\KKUL@bottom-\temp@depth@kk, height=\KKUL@height, color=\KKUL@color]{#2}%
-  }
-  % 数式モードの場合の調整
-  \NewDocumentCommand{\underLineKKAuto}{ O{} +m }{%
-    \ifmmode%
-      \mathchoice%
-        {\mbox{\underLineKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptstyle
-        {\mbox{\underLineKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else%
-      \underLineKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi%
-  }
-  %%%
-
-
-  % lua-ulで作ったnamiKK（元の名称はsnamiftだが、変更）
-  \newlength{\snamift@bottom}\setlength{\snamift@bottom}{0pt}
-  \define@key{snamift}{bottom}{%
-    \setlength{\snamift@bottom}{#1}%
-  }
-  \define@key{snamift}{color}{%
-    \def\snamift@color{#1}%
-  }
-
-  % 名称変更用のカウンター（グローバル変数）
-  \newcount\snamift@id
-
-  \NewDocumentCommand{\namiKK}{ O{} +m }{%
-    % １：キーを先にセットして \snamift@bottom を更新
-    \setlength{\snamift@bottom}{0pt}%
-    \def\snamift@color{black}%
-    \def\snamift@test@contents{#2}%
-    \setkeys{snamift}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
-      \addtolength{\snamift@bottom}{-.1\zw}%
-    \fi%
-    % ２：IDを進める
-    \global\advance\snamift@id by 1\relax%
-    % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
-    \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
-      \cleaders\hbox{%
-        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
-                            x=\f@size/12 pt,y=\f@size/25 pt]
-          \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-          \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
-            (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
-            sin (5,1) cos (6,0);
-        \end{tikzpicture}%
-      }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
-      \cleaders\hbox{%
-        \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,
-                            x=\f@size/12 pt,y=\f@size/25 pt]
-          \begin{scope}[yshift=\f@size/1.2 pt]
-            \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-            \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
-              (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
-              sin (5,1) cos (6,0);
-          \end{scope}
-        \end{tikzpicture}%
-      }%
-    }%
-    % ４：使用（縦横の分岐；直接 csname を呼ぶ）
-    {\ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
-    \fi}%
-  }
-
-  \NewDocumentCommand{\namiKKAuto@make}{ O{} +m }{%
-    \setlength{\snamift@bottom}{0pt}%
-    \def\snamift@color{black}%
-    \def\snamift@test@contents{#2}%
-    \setkeys{snamift}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
-      \addtolength{\snamift@bottom}{-.1\zw}%
-    \fi%
-    \setlength{\temp@depth@kk}{0pt}%
-    \getdepth@kk{\snamift@test@contents}%
-    \global\advance\snamift@id by 1\relax%
-    \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
-      \cleaders\hbox{%
-        % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
-        \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
-          \begin{scope}[yshift=-\temp@depth@kk]
-            % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-            \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
-            % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
-            \draw[line width=\zw/24 , yshift=\snamift@bottom, \snamift@color]
-              (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
-              sin (5,1) cos (6,0);
-          \end{scope}
-        \end{tikzpicture}%
-      }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderWavyState\number\snamift@id\endcsname{%
-      \cleaders\hbox{%
-        % \begin{tikzpicture}[xscale=.8,baseline=\f@size/4 pt,x=\f@size/12 pt,y=\f@size/25 pt]
-        \begin{tikzpicture}[xscale=.8, baseline=\zw/4, x=\zw/12, y=\zw/25]
-          % \begin{scope}[yshift=\f@size/1.2 pt-\temp@depth@kk]
-          \begin{scope}[yshift=\zw/1.2 - \temp@depth@kk]
-            % \clip[yshift=\snamift@bottom] (1,\f@size/8 pt) rectangle (5,-\f@size/8 pt);
-            \clip[yshift=\snamift@bottom] (1,\zw/8) rectangle (5,-\zw/8);
-            % \draw[line width=\f@size/24 pt,yshift=\snamift@bottom,\snamift@color]
-            \draw[line width=\zw/24, yshift=\snamift@bottom, \snamift@color]
-              (0,0) sin (1,1) cos (2,0) sin (3,-1) cos (4,0)
-              sin (5,1) cos (6,0);
-          \end{scope}
-        \end{tikzpicture}%
-      }%
-    }%
-    {\ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
-    \else%
-      \csname beginUnderWavyS\number\snamift@id\endcsname{#2}%
-    \fi}%
-  }
-  \NewDocumentCommand{\namiKKAuto}{ O{} +m }{%
-    \ifmmode%
-      \mathchoice%
-        {\mbox{\namiKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptstyle
-        {\mbox{\namiKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else%
-      \namiKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi%
-  }
-  %%%
-
-
-  % lua-ulで作ったtenKK,dashKK（元の名称はstengthとsdashgthだが、変更）
-  \newlength{\sladj@tenKK@dashKK}
-  \sladj@tenKK@dashKK =.07\zw
-
-  \newlength{\stength@radius}
-  \newlength{\stength@distance}
-  \newlength{\stength@bottom}
-
-  \define@key{stength}{radius}{\setlength{\stength@radius}{#1}}
-  \define@key{stength}{distance}{\setlength{\stength@distance}{#1}}
-  \define@key{stength}{bottom}{\setlength{\stength@bottom}{#1}}
-  \define@key{stength}{color}{\def\stength@color{#1}}
-
-  \newcount\stength@id  
-
-  \NewDocumentCommand{\tenKK}{ O{} +m }{%
-    \setlength{\stength@radius}{.1ex}%
-    \setlength{\stength@distance}{.4ex}%
-    \setlength{\stength@bottom}{0pt}%
-    \def\stength@color{mygray@luwa-ul}%
-    \def\stength@test@contents{#2}%
-    \setkeys{stength}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
-      \addtolength{\stength@bottom}{-.1\zw}%
-    \fi%
-    \global\advance\stength@id by 1\relax%
-    \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
-    \xleaders\hbox{%
-    \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
-      \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);
-    \end{tikzpicture}%
-    }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
-    \xleaders\hbox{%
-    \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      % \begin{scope}[yshift=\f@size/1.1 pt]
-      \begin{scope}[yshift=\zw/1.1]
-      \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
-      \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
-      \end{scope}
-    \end{tikzpicture}%
-    }%
-    }%
-    {\ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#2}%
-    \fi}%
-  }
-  \NewDocumentCommand{\tenKKAuto}{ O{} +m }{%
-    \ifmmode%
-      \mathchoice%
-        {\mbox{\tenKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptstyle
-        {\mbox{\tenKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else%
-      \tenKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi%
-  }
-
-  \NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
-    \setlength{\stength@radius}{.1ex}%
-    \setlength{\stength@distance}{.4ex}%
-    \setlength{\stength@bottom}{0pt}%
-    \def\stength@color{mygray@luwa-ul}%
-    \def\stength@test@contents{#2}%
-    \setkeys{stength}{#1}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \addtolength{\stength@bottom}{-.1\zw}%
-    \fi%
-    \setlength{\temp@depth@kk}{0pt}%
-    \getdepth@kk{\stength@test@contents}%
-    \global\advance\stength@id by 1\relax%
-    \expandafter\newunderlinetype\csname beginUnderDot\number\stength@id\endcsname{%
-    \xleaders\hbox{%
-    \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      \begin{scope}[yshift=-\temp@depth@kk]
-        \fill[\stength@color,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0.3,0) circle (\stength@radius);
-        \path[use as bounding box,yshift=\stength@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\stength@distance,0);
-      \end{scope}
-    \end{tikzpicture}%
-    }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderDottate\number\stength@id\endcsname{%
-    \xleaders\hbox{%
-    \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-      % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]
-      \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]
-      \fill[\stength@color,yshift=\stength@bottom] (0.3,0) circle (\stength@radius);
-      \path[use as bounding box,yshift=\stength@bottom] (0,0) rectangle (\stength@distance,0);
-      \end{scope}
-    \end{tikzpicture}%
-    }%
-    }%
-    {\ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDottate\number\stength@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDot\number\stength@id\endcsname{#2}%
-    \fi}%
-  }
-
-
-  \newlength{\underdash@length}
-  \newlength{\underdash@distance}
-  \newlength{\underdash@width}
-  \newlength{\underdash@bottom}
-
-  \define@key{underdashgth}{length}{\setlength{\underdash@length}{#1}}
-  \define@key{underdashgth}{distance}{\setlength{\underdash@distance}{#1}}
-  \define@key{underdashgth}{width}{\setlength{\underdash@width}{#1}}
-  \define@key{underdashgth}{bottom}{\setlength{\underdash@bottom}{#1}}
-  \define@key{underdashgth}{color}{\def\underdashgth@color{#1}}
-
-  \newcount\underdash@id 
-
-  \NewDocumentCommand{\dashKK}{ O{} +m }{%
-    \setlength{\underdash@length}{.4ex}%
-    \setlength{\underdash@distance}{.3ex}%
-    \setlength{\underdash@width}{.2pt}%
-    \setlength{\underdash@bottom}{0pt}%
-    \def\underdashgth@color{black}%
-    \def\sdashgth@test@contents{#2}%
-    \setkeys{underdashgth}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
-      \addtolength{\underdash@bottom}{-.1\zw}%
-    \fi%
-    \global\advance\underdash@id by 1\relax%
-    \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
-      \xleaders\hbox{%
-        \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK]%
-          (0,0) -- (\underdash@length,0);%
-          \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
-        \end{tikzpicture}%
-      }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
-      \xleaders\hbox{%
-        \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          % \begin{scope}[yshift=\f@size/1.1 pt]%
-          \begin{scope}[yshift=\zw/1.1]%
-            \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom]%
-            (0,0) -- (\underdash@length,0);%
-            \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
-          \end{scope}%
-        \end{tikzpicture}%
-      }%
-    }%
-    {\ifnum\ltjgetparameter{direction}=3 %
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
-    \fi}%
-  }
-
-  \NewDocumentCommand{\dashKKAuto@make}{ O{} +m }{%
-    \setlength{\underdash@length}{.4ex}%
-    \setlength{\underdash@distance}{.3ex}%
-    \setlength{\underdash@width}{.2pt}%
-    \setlength{\underdash@bottom}{0ex}%
-    \def\underdashgth@color{black}%
-    \def\sdashgth@test@contents{#2}%
-    \setkeys{underdashgth}{#1}%
-    \ifnum\ltjgetparameter{direction}=3% 2025/11/26加筆修正
-      \addtolength{\underdash@bottom}{-.1\zw}%
-    \fi%
-    \setlength{\temp@depth@kk}{0pt}%
-    \getdepth@kk{\sdashgth@test@contents}%
-    \global\advance\underdash@id by 1\relax%
-    \expandafter\newunderlinetype\csname beginUnderDash\number\underdash@id\endcsname{%
-      \xleaders\hbox{%
-        \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          \begin{scope}[yshift=-\temp@depth@kk]
-            \draw[\underdashgth@color,line width=\underdash@width,xshift=.108\zw,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) -- (\underdash@length,0);%
-            \path[use as bounding box,yshift=\underdash@bottom+\sladj@tenKK@dashKK] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
-          \end{scope}
-        \end{tikzpicture}%
-      }%
-    }%
-    \expandafter\newunderlinetype\csname beginUnderDashtate\number\underdash@id\endcsname{%
-      \xleaders\hbox{%
-        \begin{tikzpicture}[x=.344\zw,y=.086\zw,baseline=.301\zw]%
-          % \begin{scope}[yshift=\f@size/1.1 pt-\temp@depth@kk]%
-          \begin{scope}[yshift=\zw/1.1 - \temp@depth@kk]%
-            \draw[\underdashgth@color,line width=\underdash@width,xshift=.043\zw,yshift=\underdash@bottom] (0,0) -- (\underdash@length,0);%
-            \path[use as bounding box,yshift=\underdash@bottom] (0,0) rectangle (\underdash@length+\underdash@distance,0);%
-          \end{scope}%
-        \end{tikzpicture}%
-      }%
-    }%
-    {\ifnum\ltjgetparameter{direction}=3%
-      \csname beginUnderDashtate\number\underdash@id\endcsname{#2}%
-    \else%
-      \csname beginUnderDash\number\underdash@id\endcsname{#2}%
-    \fi}%
-  }
-  \NewDocumentCommand{\dashKKAuto}{ O{} +m }{%
-    \ifmmode%
-      \mathchoice%
-        {\mbox{\dashKKAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % textstyle (inline)
-        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptstyle
-        {\mbox{\dashKKAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else%
-      \dashKKAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi%
-  }
-  %%%
-
-
-  % overLine
-  \define@key{overLine}{color}{%
-    \def\overLineKK@color{#1}%
-  }
-
-  \newlength{\overLineKK@KK@Adjust}
-
-  \NewDocumentCommand{\overLineKK}{ O{} +m }{%
-    % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
-    \setlength{\overLineKK@KK@Adjust}{\zw}%
-    \def\overLineKK@color{black}%
-    \def\overLineKK@test@contents{#2}%
-    \setkeys{overLine}{#1}%
-    \underLineKK[bottom=\overLineKK@KK@Adjust-.05\zw,color=\overLineKK@color]{#2}%
-    }
-
-  \newlength{\temp@depth@kk@over}
-
-  % overline専用の調整機構
-  \NewDocumentCommand{\getdepth@kk@over}{m}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \settodepth{\temp@depth@kk@over}{#1}%
-      \addtolength{\temp@depth@kk@over}{-.45\zw}%
-    \else%
-      \settoheight{\temp@depth@kk@over}{#1}%
-      \addtolength{\temp@depth@kk@over}{-.8\zw}%
-      \setlength{\temp@depth@kk@over}{-\temp@depth@kk@over}%
-    \fi%
-  }
-
-  \NewDocumentCommand{\overLineKKAuto}{ O{} +m }{%
-    % \setlength{\overLineKK@KK@Adjust}{\f@size pt}%
-    \setlength{\overLineKK@KK@Adjust}{\zw}%
-    \setlength{\temp@depth@kk@over}{0pt}%
-    \def\overLineKK@color{black}%
-    \def\overLineKK@test@contents{#2}%
-    \getdepth@kk@over{\overLineKK@test@contents}%
-    \setkeys{overLine}{#1}%
-    \underLineKK@plain[bottom=\overLineKK@KK@Adjust-\temp@depth@kk@over,color=\overLineKK@color]{#2}%
-  }
-  %%%
-
-
-  % 蛍光ペン
-  % 通常の細めの線
-  \newlength{\thinHighLight@KK@Adjust}
-  \newcommand{\thinHighLight@KK@Adjust@tmp}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \setlength{\thinHighLight@KK@Adjust}{-.3\zw}%
-    \else%
-      \setlength{\thinHighLight@KK@Adjust}{0pt}%
-    \fi%
-  }
-
-  \DeclareDocumentCommand{\thinHighLight}{ O{color=gray} +m }{%
-    \thinHighLight@KK@Adjust@tmp%
-    \def\thinHighLight@test@contents{#2}%
-    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,%
-    bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust]{#2}%
-  }
-
-  \DeclareDocumentCommand{\thinHighLightAuto}{ O{color=gray} +m }{%
-    \thinHighLight@KK@Adjust@tmp%
-    \def\thinHighLight@test@contents{#2}%
-    \setlength{\temp@depth@kk}{0pt}%
-    \getdepth@kk{\thinHighLight@test@contents}%
-    \underLineKK[#1,height=.25\underLine@KK@Adjust@tmp,%
-    bottom=-.04\underLine@KK@Adjust@tmp+\thinHighLight@KK@Adjust-\temp@depth@kk]{#2}%
-  }
-
-
-  % 通常の太めの線
-  \newlength{\thickHighLight@KK@Adjust}
-  \newcommand{\thickHighLight@KK@Adjust@tmp}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \setlength{\thickHighLight@KK@Adjust}{-1.1\zw}%
-    \else%
-      \setlength{\thickHighLight@KK@Adjust}{0pt}%
-    \fi%
-  }
-
-  \DeclareDocumentCommand{\thickHighLight}{ O{color=gray} +m }{%
-    \thickHighLight@KK@Adjust@tmp%
-    \def\thickHighLight@test@contents{#2}%
-    \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp,%
-    bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust]{#2}%
-  }
-
-  % thickHighLightAuto専用の調整機構
-  \newlength{\temp@height@kk@thickHighLight}
-  \NewDocumentCommand{\getheight@kk@thickHighLight}{m}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \settodepth{\temp@height@kk@thickHighLight}{#1}%
-      \addtolength{\temp@height@kk@thickHighLight}{-.5\zw}%
-    \else%
-      \settoheight{\temp@height@kk@thickHighLight}{#1}%
-      \addtolength{\temp@height@kk@thickHighLight}{-.9\zw}%
-    \fi%
-  }
-
-  \DeclareDocumentCommand{\thickHighLightAuto}{ O{color=gray} +m }{%
-    \thickHighLight@KK@Adjust@tmp%
-    \def\thickHighLight@test@contents{#2}%
-    \setlength{\temp@depth@kk}{0pt}%
-    \setlength{\temp@height@kk@thickHighLight}{0pt}%
-    \getdepth@kk{\thickHighLight@test@contents}%
-    \getheight@kk@thickHighLight{\thickHighLight@test@contents}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp-\temp@depth@kk+\temp@height@kk@thickHighLight,%
-      bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@height@kk@thickHighLight]{#2}%
-    \else%
-      \underLineKK[#1,height=1.15\underLine@KK@Adjust@tmp+\temp@height@kk@thickHighLight+\temp@depth@kk,%
-      bottom=-.04\underLine@KK@Adjust@tmp+\thickHighLight@KK@Adjust-\temp@depth@kk]{#2}%
-    \fi%
-  }
-  %%%
-
-
-  % 二重線
-  \newlength{\nijyusen@bottom}
-  \newlength{\nijyusen@bottom@adjust}
-
-  \define@key{nijyusen}{color}{\def\nijyusen@KK@color{#1}}
-  \define@key{nijyusen}{bottom}{\setlength{\nijyusen@bottom}{#1}}
-
-  \NewDocumentCommand\nijyusen{ O{} +m }{%
-    \def\nijyusen@KK@color{black}%
-    \setlength{\nijyusen@bottom}{0pt}%
-    \setkeys{nijyusen}{#1}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
-    \else%
-      \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
-    \fi%
-    \underLineKK[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom,color=\nijyusen@KK@color]%
-    {\underLineKK[bottom=\nijyusen@bottom@adjust,color=\nijyusen@KK@color]{#2}}%
-  }
-
-  \NewDocumentCommand{\nijyusenAuto@make}{ O{} +m }{%
-    \def\nijyusen@KK@color{black}%
-    \def\nijyusen@test@contents{#2}%
-    \setlength{\temp@depth@kk}{0pt}%
-    \getdepth@kk{\nijyusen@test@contents}%
-    \setlength{\nijyusen@bottom}{0pt}%
-    \setkeys{nijyusen}{#1}%
-    \ifnum\ltjgetparameter{direction}=3%
-      \setlength{\nijyusen@bottom@adjust}{-\nijyusen@bottom}%
-    \else%
-      \setlength{\nijyusen@bottom@adjust}{\nijyusen@bottom}%
-    \fi%
-    \underLineKK@plain[bottom=-.1\underLine@KK@Adjust@tmp+\nijyusen@bottom-\temp@depth@kk,color=\nijyusen@KK@color]%
-    {\underLineKK@plain[bottom=\nijyusen@bottom@adjust-\temp@depth@kk,color=\nijyusen@KK@color]{#2}}%
-  }
-  \NewDocumentCommand{\nijyusenAuto}{ O{} +m }{%
-    \ifmmode%
-      \mathchoice%
-        {\mbox{\nijyusenAuto@make[#1]{$\displaystyle #2$}}} % displaystyle
-        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % textstyle (inline)
-        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptstyle
-        {\mbox{\nijyusenAuto@make[#1]{$#2$}}}               % scriptscriptstyle
-    \else%
-      \nijyusenAuto@make[#1]{#2}% テキストモードではそのまま出力（mboxで包まない）
-    \fi%
-  }
-
-
-  % 二重打ち消し線
-  \newlength{\keshinijyuusen@KK@Adjust}
-  \newcommand{\keshinijyuusen@KK@Adjust@tmp}{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \setlength{\keshinijyuusen@KK@Adjust}{0pt}%
-    \else%
-      \setlength{\keshinijyuusen@KK@Adjust}{.0646\zw}%
-    \fi%
-  }
-
-  \define@key{keshinijyusen}{color}{\def\keshinijyusen@KK@color{#1}}
-  \NewDocumentCommand{\keshinijyusen}{ O{} +m }{%
-    \def\keshinijyusen@KK@color{color=black}%
-    \def\keshinijyusen@test@contents{#2}%
-    \setkeys{keshinijyusen}{#1}%
-    \keshinijyuusen@KK@Adjust@tmp%
-    \underLineKK@plain[bottom=.57\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{%
-      \underLineKK@plain[bottom=.47\underLine@KK@Adjust@tmp-\keshinijyuusen@KK@Adjust,#1]{#2}%
-    }
-  }
-  %%%
-
-
-  % 下線の前に番号を振る
-  \newcommand{\linenumbering@luwa}[1]{\raisebox{-.43\zw}{\scalebox{.6}{#1}}}
-
-  \newdimen\overtline@f@size
-  \NewDocumentCommand{\tlinenumbering@luwa}{ s m }{%
-    % \setlength{\overtline@f@size}{\f@size pt}%
-    \setlength{\overtline@f@size}{\zw}%
-    \raisebox{.6\overtline@f@size}{%
-      \IfBooleanTF{#1}{%
-        \tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6] (char) {#2};}\nolinebreak%
-      }{%
-        \tikz[baseline=(char.base)]{\node[inner sep=0pt, anchor=center, scale=.6, rotate=90] (char) {#2};}\nolinebreak%
-      }%
-    }\hskip.0645\zw%
-  }
-
-  % 縦横両対応に
-  \NewDocumentCommand{\LineNumbering}{ s m O{0pt} }{%
-    \ifnum\ltjgetparameter{direction}=3%
-      \ltjghostbeforejachar%
-      \IfBooleanTF{#1}{%
-        \raisebox{#3}{\tlinenumbering@luwa*{#2}}\nolinebreak%
-      }{%
-        \raisebox{#3}{\tlinenumbering@luwa{#2}}\nolinebreak%
-      }%
-    \else%
-      \ltjghostbeforejachar%
-      \raisebox{#3}{\linenumbering@luwa{#2}\nolinebreak}%
-    \fi%
-  }
-  %%%
-
-  \endinput
-\end{lstlisting}
 \end{document}

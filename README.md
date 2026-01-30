@@ -11,10 +11,10 @@
 `luwa-ul` provides robust underlining and highlighting functionality. Unlike standard methods, these decorations remain intact even in vertical writing environments and when used alongside ruby (furigana), math mode, and other complex layouts.
 `luwa-ul` は、高度な下線およびハイライト機能を提供します。従来のパッケージとは異なり、縦書き環境や、ルビ（ふりがな）・数式などが混在する複雑なレイアウトでも崩れることなく描画されます。
 
-- **Version**: 1.2.1
-- **Date**: 2025-12-28
+- **Version**: 1.2.5
+- **Date**: 2026-01-30
 - **Author**: Kosei Kawaguchi (a.k.a. KKTeX)
-- **License**: MIT（LPPL 1.3c から変更）
+- **License**: MIT
 - **Repository**: [https://github.com/KKTeX/luwa-ul](https://github.com/KKTeX/luwa-ul)
 - **Support**: p.c.aces1056@gmail.com
 
@@ -27,8 +27,8 @@
   - 日本語の縦書き環境でも、正しい位置と外観で下線やハイライトを維持します。
 
 - **Compatibility with Ruby and Math / ルビや数式との共存**
-  - Works seamlessly even when characters have ruby (furigana) or include mathematical symbols.
-  - ルビが付いた文字や、数式モードが含まれる箇所でもシームレスに動作します。
+  - Works seamlessly even when characters have ruby (furigana) or include mathematical symbols like `\frac, \int etc.`. When you use Auto series, line positions are automatically adjusted based on the depth and height of its argument.
+  - ルビ（ふりがな）が付いた文字や、`\frac`・`\int` などの数式記号が含まれている場合でも、問題なく動作します。「Autoシリーズ」を使用すると、引数の高さや深さに応じて、下線の位置が自動的に最適化されます。
 
 - **Flexible Highlighting / 柔軟な装飾**
   - High-quality visual results powered by `lua-ul` and `tikz`.
@@ -42,7 +42,7 @@
 > 本パッケージは **LuaLaTeX専用** です。
 
 **Dependencies / 依存パッケージ:**
-- `luacolor`, `xcolor`, `lua-ul`, `calc`, `tikz`
+- `luacolor`, `xcolor`, `lua-ul`, `calc`, `tikz`, `luatexja-adjust`
 
 ---
 

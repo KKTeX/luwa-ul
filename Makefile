@@ -1,5 +1,4 @@
 # ----- setting ------
-SAMPLE_TARGET = luw-ul-sample
 DOC_TARGET = luwa-ul-doc
 TEST_TARGET = luwa-ul-test
 RC     = .latexmkrc

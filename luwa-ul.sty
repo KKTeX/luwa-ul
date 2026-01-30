@@ -317,8 +317,8 @@
 }
 
 \NewDocumentCommand{\tenKKAuto@make}{ O{} +m }{%
-  \setlength{\stength@radius}{.1ex}%
-  \setlength{\stength@distance}{.4ex}%
+  \setlength{\stength@radius}{.05\zw}%
+  \setlength{\stength@distance}{.2\zw}%
   \setlength{\stength@bottom}{0pt}%
   \def\stength@color{mygray@luwa-ul}%
   \def\stength@test@contents{#2}%
@@ -371,8 +371,8 @@
 \newcount\underdash@id 
 
 \NewDocumentCommand{\dashKK}{ O{} +m }{%
-  \setlength{\underdash@length}{.4ex}%
-  \setlength{\underdash@distance}{.3ex}%
+  \setlength{\underdash@length}{.2\zw}%
+  \setlength{\underdash@distance}{.15\zw}%
   \setlength{\underdash@width}{.2pt}%
   \setlength{\underdash@bottom}{0pt}%
   \def\underdashgth@color{black}%
