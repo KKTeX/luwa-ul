@@ -156,7 +156,7 @@
 \newcount\snamift@id
 
 \NewDocumentCommand{\namiKK}{ O{} +m }{%
-  % １：キーを先にセットして \snamift@bottom を更新
+  % 1：キーを先にセットして \snamift@bottom を更新
   \setlength{\snamift@bottom}{0pt}%
   \def\snamift@color{black}%
   \def\snamift@test@contents{#2}%
@@ -164,9 +164,9 @@
   \ifnum\ltjgetparameter{direction}=3%
     \addtolength{\snamift@bottom}{-.1\zw}%
   \fi%
-  % ２：IDを進める
+  % 2：IDを進める
   \global\advance\snamift@id by 1\relax%
-  % ３：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
+  % 3：ユニーク名で下線タイプを定義（正しく展開されるように \expandafter と \number を使用）
   \expandafter\newunderlinetype\csname beginUnderWavyS\number\snamift@id\endcsname{%
     \cleaders\hbox{%
       \begin{tikzpicture}[xscale=.8,baseline=\zw/4 pt,
@@ -191,7 +191,7 @@
       \end{tikzpicture}%
     }%
   }%
-  % ４：使用（縦横の分岐；直接 csname を呼ぶ）
+  % 4：使用（縦横の分岐；直接 csname を呼ぶ）
   {\ifnum\ltjgetparameter{direction}=3 %
     \csname beginUnderWavyState\number\snamift@id\endcsname{#2}%
   \else%
